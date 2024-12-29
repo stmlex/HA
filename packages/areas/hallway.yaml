@@ -1,0 +1,40 @@
+light:
+  - platform: template
+    lights:
+      hallway_light:
+        friendly_name: "Hallway light"
+        turn_on:
+          service: mqtt.publish
+          data:
+            topic: ir_room/cmnd/IRsend
+            payload: '{"Protocol":"NEC","Bits":32,"Data":"0x05ED9768"}'
+        turn_off:
+          service: mqtt.publish
+          data:
+            topic: ir_room/cmnd/IRsend
+            payload: '{"Protocol":"NEC","Bits":32,"Data":"0x05ED9768"}'
+automation:
+  - id: "Door_to_open"
+    alias: "Door is open"
+    description: ""
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.0x00158d0002890189_contact
+        to: "on"
+    condition: []
+    action:
+      - service: notify.telegram_main
+        data:
+          message: "Дверь🚪"
+  #- id: "Door_to_closed"
+  #  alias: "Door is closed"
+  #  description: ""
+  #  trigger:
+  #    - platform: state
+  #      entity_id: binary_sensor.0x00158d0002890189_contact
+  #      to: "off"
+  #  condition: []
+  #  action:
+  #    - service: notify.telegram_main
+  #      data:
+  #        message: "Дверь закрыта"
