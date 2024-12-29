@@ -1,0 +1,29 @@
+telegram_bot:
+  - platform: polling
+    api_key: !secret TELEGRAM_API_KEY
+    allowed_chat_ids:
+      - !secret TELEGRAM_CHAT_ID
+notify:
+  - name: telegram_main
+    platform: telegram
+    chat_id: !secret TELEGRAM_CHAT_ID
+# Sending notifications using Telegram is straight forward.
+# Just place something like below in whatever automation
+# or script that you want to send a notification:
+#  - service: notify.telegram_main
+#    data:
+#      message: "URGENT: This is a telegram notification"
+# - id: "test_ping_pong_telegram"
+automation:
+  - id: "test_ping_pong_telegram"
+    alias: "Telegram bot that reply pong to ping"
+    description: ""
+    trigger:
+      platform: event
+      event_type: telegram_command
+      event_data:
+        command: "/ping"
+    action:
+      - service: telegram_bot.send_message
+        data:
+          message: "pong!"
