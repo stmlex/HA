@@ -8,9 +8,12 @@ yandex_smart_home:
       - sensor.a4c138b90c73_temperature # balcony
       - binary_sensor.0x00158d0002890189_contact
       - sensor.0x00158d000246651d_action
-      # - light.rgb_clock
+      - light.rgb_clock
       # - light.hallway_light
-      # - media_player.televizor_v_gostinoi
+      - media_player.televizor_v_gostinoi_2
+      - media_player.televizor_v_detskoi_2
+      - media_player.televizor_v_spalne_2
+      - media_player.televizor_na_kukhne_2
       - sensor.mh_z19_co2_value
       - sensor.mh_z19_co2_value_2
       - sensor.co2
@@ -181,9 +184,9 @@ yandex_smart_home:
     # light.hallway_light:
     #   name: "Люстра"
     #   room: "Прихожая"
-    # light.rgb_clock:
-    #   name: "Часы"
-    #   room: "Гостиная"
+    light.rgb_clock:
+      name: "Часы"
+      room: "Гостиная"
     light.neopixel_light:
       name: "Лампа"
       room: "Гостиная"
@@ -193,6 +196,15 @@ yandex_smart_home:
     light.neopixel_light_3:
       name: "Лампа"
       room: "Детская"
-    # media_player.televizor_v_gostinoi:
-    #   name: Телевизор
-    #   room: Гостиная
+    media_player.televizor_v_gostinoi_2:
+      name: Телевизор
+      room: Гостиная
+    media_player.televizor_v_detskoi_2:
+      name: Телевизор
+      room: Детская
+    media_player.televizor_v_spalne_2:
+      name: Телевизор
+      room: Спальня
+    media_player.televizor_na_kukhne_2:
+      name: Телевизор
+      room: Кухня
