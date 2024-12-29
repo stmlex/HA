@@ -23,7 +23,7 @@ yandex_smart_home:
       - light.neopixel_light
       - light.neopixel_light_2
       - light.neopixel_light_3
-      # - button.garland_power
+      - switch.garland_on_off
       # - climate.air_cooler
       # - button.garland_power_2
       # - climate.air_cooler_2
@@ -50,17 +50,17 @@ yandex_smart_home:
     # climate.air_cooler_2:
     #   name: Кондиционер
     #   room: Спальня
-    # button.garland_power_2:
-    #   name: Гирлянда
-    #   room: Спальня
-    #   custom_toggles:
-    #     backlight:
-    #       turn_on:
-    #         service: button.press
-    #         entity_id: button.garland_effect_2
-    #       turn_off:
-    #         service: button.press
-    #         entity_id: button.garland_effect_2
+    switch.garland_on_off:
+      name: Гирлянда
+      room: Спальня
+      custom_toggles:
+        backlight:
+          turn_on:
+            service: button.press
+            entity_id: button.garland_effect
+          turn_off:
+            service: button.press
+            entity_id: button.garland_effect
     humidifier.uvlazhnitel:
       name: Увлажнитель
       room: Детская
