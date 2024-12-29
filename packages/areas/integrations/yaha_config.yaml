@@ -1,0 +1,198 @@
+yandex_smart_home:
+  filter:
+    include_entity_globs:
+      - sensor.a4c1381840a0_temperature # livingroom
+      - sensor.a4c138041e22_temperature # bedroom
+      - sensor.a4c138a0dbd3_temperature # childrenroom
+      - sensor.a4c138aed13a_temperature # kitchen
+      - sensor.a4c138b90c73_temperature # balcony
+      - binary_sensor.0x00158d0002890189_contact
+      - sensor.0x00158d000246651d_action
+      # - light.rgb_clock
+      # - light.hallway_light
+      # - media_player.televizor_v_gostinoi
+      - sensor.mh_z19_co2_value
+      - sensor.mh_z19_co2_value_2
+      - sensor.co2
+      - humidifier.uvlazhnitel
+      # - humidifier.uvlazhnitel_2
+      - humidifier.smartmi_evaporative_humidifier
+      - light.neopixel_light
+      - light.neopixel_light_2
+      - light.neopixel_light_3
+      # - button.garland_power
+      # - climate.air_cooler
+      # - button.garland_power_2
+      # - climate.air_cooler_2
+  # color_profile:
+  #   profile_clock:
+  #     red: ["255", "0", "0"]
+  #     green: ["0", "255", "0"]
+  #     blue: ["0", "0", "255"]
+  entity_config:
+    # button.garland_power:
+    #   name: Елочка
+    #   room: Гостиная
+    #   custom_toggles:
+    #     backlight:
+    #       turn_on:
+    #         service: button.press
+    #         entity_id: button.garland_effect
+    #       turn_off:
+    #         service: button.press
+    #         entity_id: button.garland_effect
+    # climate.air_cooler:
+    #   name: Кондиционер
+    #   room: Детская
+    # climate.air_cooler_2:
+    #   name: Кондиционер
+    #   room: Спальня
+    # button.garland_power_2:
+    #   name: Гирлянда
+    #   room: Спальня
+    #   custom_toggles:
+    #     backlight:
+    #       turn_on:
+    #         service: button.press
+    #         entity_id: button.garland_effect_2
+    #       turn_off:
+    #         service: button.press
+    #         entity_id: button.garland_effect_2
+    humidifier.uvlazhnitel:
+      name: Увлажнитель
+      room: Детская
+      properties:
+        - type: water_level
+          entity: sensor.uvlazhnitel_water_level
+    # humidifier.uvlazhnitel_2:
+    #   name: Гостиная
+    #   room: Детская
+    humidifier.smartmi_evaporative_humidifier:
+      name: Увлажнитель
+      room: Спальня
+      properties:
+        - type: water_level
+          entity: sensor.smartmi_evaporative_humidifier_water_level
+    sensor.mh_z19_co2_value:
+      name: Качество воздуха спальня
+      room: Спальня
+      properties:
+        - type: co2_level
+          entity: sensor.mh_z19_co2_value
+        - type: pm2.5_density
+          entity: sensor.concentration2_2_5mm
+        - type: pm1_density
+          entity: sensor.concentration1_1_0mm
+        - type: pm10_density
+          entity: sensor.concentration3_10mm
+    sensor.mh_z19_co2_value_2:
+      name: Качество воздуха гостиная
+      room: Гостиная
+      properties:
+        - type: co2_level
+          entity: sensor.mh_z19_co2_value_2
+        - type: pm2.5_density
+          entity: sensor.concentration2_2_5mm_2
+        - type: pm1_density
+          entity: sensor.concentration1_1_0mm_2
+        - type: pm10_density
+          entity: sensor.concentration3_10mm_2
+    sensor.co2:
+      name: Качество воздуха детская
+      room: Детская
+      properties:
+        - type: co2_level
+          entity: sensor.co2
+        - type: pm2.5_density
+          entity: sensor.pm1006k_2_5mm_m3
+        - type: pm1_density
+          entity: sensor.pm1006k_1_0mm_m3
+        - type: pm10_density
+          entity: sensor.pm1006k_10_0mm_m3
+        - type: humidity
+          entity: sensor.humidity
+    sensor.a4c1381840a0_temperature:
+      name: Датчик гостиной
+      room: Гостиная
+      properties:
+        - type: temperature
+          entity: sensor.a4c1381840a0_temperature
+        - type: humidity
+          entity: sensor.a4c1381840a0_humidity
+        # - type: battery_level
+        #   entity: sensor.a4c1381840a0_battery
+    sensor.a4c138041e22_temperature:
+      name: Датчик спальни
+      room: Спальня
+      properties:
+        - type: temperature
+          entity: sensor.a4c138041e22_temperature
+        - type: humidity
+          entity: sensor.a4c138041e22_humidity
+    #     - type: battery_level
+    #       entity: sensor.a4c138041e22_battery
+    sensor.a4c138a0dbd3_temperature:
+      name: Датчик детской
+      room: Детская
+      properties:
+        - type: temperature
+          entity: sensor.a4c138a0dbd3_temperature
+        - type: humidity
+          entity: sensor.a4c138a0dbd3_humidity
+    #     - type: battery_level
+    #       entity: sensor.a4c138a0dbd3_battery
+    sensor.a4c138aed13a_temperature:
+      name: Датчик кухни
+      room: Кухня
+      properties:
+        - type: temperature
+          entity: sensor.a4c138aed13a_temperature
+        - type: humidity
+          entity: sensor.a4c138aed13a_humidity
+    #     - type: battery_level
+    #       entity: sensor.a4c138aed13a_battery
+    sensor.a4c138b90c73_temperature:
+      name: Датчик балкона
+      room: Балкон
+      properties:
+        - type: temperature
+          entity: sensor.a4c138b90c73_temperature
+        - type: humidity
+          entity: sensor.a4c138b90c73_humidity
+    #     - type: battery_level
+    #       entity: sensor.a4c138b90c73_battery
+    binary_sensor.0x00158d0002890189_contact:
+      name: Датчик входной двери
+      room: Прихожая
+      properties:
+        - type: open
+          entity: binary_sensor.0x00158d0002890189_contact
+    #     - type: battery_level
+    #       entity: sensor.0x00158d0002890189_battery
+    # sensor.0x00158d000246651d_action:
+    #   device_class: button
+    #   name: Кнопка беспроводная
+    #   room: Спальня
+    #   properties:
+    #     # - type: button
+    #     #   entity: sensor.0x00158d000246651d_action
+    #     - type: battery_level
+    #       entity: sensor.0x00158d000246651d_battery
+    # light.hallway_light:
+    #   name: "Люстра"
+    #   room: "Прихожая"
+    # light.rgb_clock:
+    #   name: "Часы"
+    #   room: "Гостиная"
+    light.neopixel_light:
+      name: "Лампа"
+      room: "Гостиная"
+    light.neopixel_light_2:
+      name: "Лампа"
+      room: "Спальня"
+    light.neopixel_light_3:
+      name: "Лампа"
+      room: "Детская"
+    # media_player.televizor_v_gostinoi:
+    #   name: Телевизор
+    #   room: Гостиная

@@ -1,0 +1,8 @@
+/*
+!*.yaml
+!*.csv
+!.gitignore
+!packages
+!blueprints
+secrets.yaml
+!esphome
