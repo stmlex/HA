@@ -8,10 +8,6 @@ esp8266:
 # Enable logging
 logger:
 
-# Example configuration entry
-http_request:
-  verify_ssl: false
-
 # Enable Home Assistant API
 api:
   encryption:
@@ -30,27 +26,13 @@ wifi:
     ssid: "Rgb-Clock Fallback Hotspot"
     password: !secret ESPHOME_AP_PSW
 
-substitutions:
-  api_key: !secret TELEGRAM_API_KEY
-  chat_id: !secret TELEGRAM_CHAT_ID
-
 time:
   - platform: sntp
     id: sntp_time
     timezone: Europe/Moscow
     servers:
       - 192.168.1.3
-    on_time_sync:
-      - http_request.post:
-          url: "https://api.telegram.org/bot${api_key}/sendMessage"
-          headers:
-            Content-Type: application/json
-          json:
-            chat_id: ${chat_id}
-            text: RGB clock time are sync
-    
       
-
 light:
   - platform: neopixelbus
     id: light_clock
@@ -65,26 +47,26 @@ light:
         - light.control:
             id: light_clock
             effect: Clock
-            
     effects:
       - addressable_lambda:
           name: "Clock"
           update_interval: 100ms
           lambda: |-
-            constexpr int PIXEL_QTY = 87;
             constexpr int SEGMENT_LENGTH = 3;
             int red = (int)(id(light_clock).remote_values.get_red() * 255);
             int green = (int)(id(light_clock).remote_values.get_green() * 255);
             int blue = (int)(id(light_clock).remote_values.get_blue() * 255);
             auto CLOCK_COLOR = Color(red,green,blue);
             typedef std::array<int, 7> digit_code_t;
-            //Порядок расположения сегментов цифры на ленте.
+
+            //Digits segments order by clock geometry
             //			3(A)
             //	2(F)			4(B)
             //			7(G)
             //	1(E)			5(C)
             //			6(D)
-            const std::array<digit_code_t, 10> digits_table = 
+
+            const std::array<digit_code_t, 11> digits_table = 
             { 
               { 
                 {1,1,1,1,1,1,0}, //0
@@ -97,6 +79,7 @@ light:
                 {0,0,1,1,1,0,0}, //7
                 {1,1,1,1,1,1,1}, //8
                 {0,1,1,1,1,1,1}, //9
+                {0,0,0,0,0,0,1}, //-
               } 
             };
             typedef struct{
@@ -130,24 +113,30 @@ light:
               }
             };
 
-            it.range(0, PIXEL_QTY) = Color::BLACK;
-
+            it.all() = Color::BLACK;
             static int point_state = 0;
             if(++point_state >= points_pattern.size())
+              point_state = 0;
+            for (int i = 0; i < points_indexes.size(); ++i)
             {
-              auto time = id(sntp_time).now();
+              if (points_pattern[point_state][i])
+                it[points_indexes[i]] = CLOCK_COLOR;
+            }
+
+            auto time = id(sntp_time).now();
+            if(time.is_valid())
+            {
               digits[0].value = time.hour / 10;
               digits[1].value = time.hour % 10;
               digits[2].value = time.minute / 10;
               digits[3].value = time.minute % 10;
-              point_state = 0;
             }
-            for (int i = 0; i < points_indexes.size(); ++i)
+            else
             {
-              if (points_pattern[point_state][i])
-              {
-                it[points_indexes[i]] = CLOCK_COLOR;
-              }
+              digits[0].value = 10; //-
+              digits[1].value = 10; //-
+              digits[2].value = 10; //-
+              digits[3].value = 10; //-
             }
 
             for (auto digit : digits){
