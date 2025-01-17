@@ -8,6 +8,10 @@ esp8266:
 # Enable logging
 logger:
 
+# Example configuration entry
+http_request:
+  verify_ssl: false
+
 # Enable Home Assistant API
 api:
   encryption:
@@ -24,14 +28,28 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "Rgb-Clock Fallback Hotspot"
-    password: "1234567890"
+    password: !secret ESPHOME_AP_PSW
+
+substitutions:
+  api_key: !secret TELEGRAM_API_KEY
+  chat_id: !secret TELEGRAM_CHAT_ID
 
 time:
   - platform: sntp
     id: sntp_time
     timezone: Europe/Moscow
     servers:
-     - 192.168.1.3
+      - 192.168.1.3
+    on_time_sync:
+      - http_request.post:
+          url: "https://api.telegram.org/bot${api_key}/sendMessage"
+          headers:
+            Content-Type: application/json
+          json:
+            chat_id: ${chat_id}
+            text: RGB clock time are sync
+    
+      
 
 light:
   - platform: neopixelbus
