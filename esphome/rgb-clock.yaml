@@ -1,0 +1,145 @@
+esphome:
+  name: rgb_clock
+  friendly_name: rgb_clock
+
+esp8266:
+  board: d1_mini_pro
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "+fAKr2nn04aSkTs51YaCyZrruIuGWI2C1Gv3zWw+fx0="
+
+ota:
+  - platform: esphome
+    password: "5797a79fbdd64d99a3c751acfaf3261d"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Rgb-Clock Fallback Hotspot"
+    password: "1234567890"
+
+time:
+  - platform: sntp
+    id: sntp_time
+    timezone: Europe/Moscow
+    servers:
+     - 192.168.1.3
+
+light:
+  - platform: neopixelbus
+    id: light_clock
+    type: GRB
+    variant: WS2812
+    pin: RX
+    num_leds: 88
+    name: "RGB_clock"
+    restore_mode: always_on
+    on_turn_on:
+      then:
+        - light.control:
+            id: light_clock
+            effect: Clock
+            
+    effects:
+      - addressable_lambda:
+          name: "Clock"
+          update_interval: 100ms
+          lambda: |-
+            constexpr int PIXEL_QTY = 87;
+            constexpr int SEGMENT_LENGTH = 3;
+            int red = (int)(id(light_clock).remote_values.get_red() * 255);
+            int green = (int)(id(light_clock).remote_values.get_green() * 255);
+            int blue = (int)(id(light_clock).remote_values.get_blue() * 255);
+            auto CLOCK_COLOR = Color(red,green,blue);
+            typedef std::array<int, 7> digit_code_t;
+            //Порядок расположения сегментов цифры на ленте.
+            //			3(A)
+            //	2(F)			4(B)
+            //			7(G)
+            //	1(E)			5(C)
+            //			6(D)
+            const std::array<digit_code_t, 10> digits_table = 
+            { 
+              { 
+                {1,1,1,1,1,1,0}, //0
+                {0,0,0,1,1,0,0}, //1
+                {1,0,1,1,0,1,1}, //2
+                {0,0,1,1,1,1,1}, //3
+                {0,1,0,1,1,0,1}, //4
+                {0,1,1,0,1,1,1}, //5
+                {1,1,1,0,1,1,1}, //6
+                {0,0,1,1,1,0,0}, //7
+                {1,1,1,1,1,1,1}, //8
+                {0,1,1,1,1,1,1}, //9
+              } 
+            };
+            typedef struct{
+              const int index;
+              int value;
+            }digit_t;
+            static std::array<digit_t, 4> digits = 
+            {
+              {
+                {0,8},
+                {21,8},
+                {45,8},
+                {66,8}
+              }
+            };
+            typedef std::array<int, 3> points_indexes_t;
+            const points_indexes_t points_indexes = {42, 43, 44};
+            const std::array<points_indexes_t, 10> points_pattern =
+            {
+              {
+                {1,0,0},
+                {0,1,0},
+                {0,0,1},
+                {0,0,0},
+                {0,0,0},
+                {0,0,0},
+                {0,0,0},
+                {0,0,0},
+                {0,0,0},
+                {0,0,0},
+              }
+            };
+
+            it.range(0, PIXEL_QTY) = Color::BLACK;
+
+            static int point_state = 0;
+            if(++point_state >= points_pattern.size())
+            {
+              auto time = id(sntp_time).now();
+              digits[0].value = time.hour / 10;
+              digits[1].value = time.hour % 10;
+              digits[2].value = time.minute / 10;
+              digits[3].value = time.minute % 10;
+              point_state = 0;
+            }
+            for (int i = 0; i < points_indexes.size(); ++i)
+            {
+              if (points_pattern[point_state][i])
+              {
+                it[points_indexes[i]] = CLOCK_COLOR;
+              }
+            }
+
+            for (auto digit : digits){
+              for (int seg = 0; seg < digits_table[0].size(); ++seg)
+              {
+                if (digits_table[digit.value][seg]) 
+                {
+                  it.range(digit.index + seg * SEGMENT_LENGTH, digit.index + seg * SEGMENT_LENGTH + SEGMENT_LENGTH) = CLOCK_COLOR;
+                }
+              }
+            }
+
+captive_portal:
