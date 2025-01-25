@@ -20,9 +20,9 @@ yandex_smart_home:
       - humidifier.uvlazhnitel
       # - humidifier.uvlazhnitel_2
       - humidifier.smartmi_evaporative_humidifier
-      - light.neopixel_light
-      - light.neopixel_light_2
-      - light.rgb_lamp_childrens_rgb_lamp
+      - light.night_light_livingroom_rgb_lamp
+      - light.night_light_bedroom_rgb_lamp
+      - light.night_light_childrens_rgb_lamp
       - switch.garland_on_off
       # - climate.air_cooler
       # - button.garland_power_2
@@ -187,13 +187,13 @@ yandex_smart_home:
     light.rgb_clock:
       name: "Часы"
       room: "Гостиная"
-    light.neopixel_light:
+    light.night_light_livingroom_rgb_lamp:
       name: "Лампа"
       room: "Гостиная"
-    light.neopixel_light_2:
+    light.night_light_bedroom_rgb_lamp:
       name: "Лампа"
       room: "Спальня"
-    light.rgb_lamp_childrens_rgb_lamp:
+    light.night_light_childrens_rgb_lamp:
       name: "Лампа"
       room: "Детская"
     media_player.televizor_v_gostinoi_2:
