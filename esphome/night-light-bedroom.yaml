@@ -39,7 +39,7 @@ light:
     id: rgb_light
     type: GRB
     variant: WS2812
-    pin: GPIO2
+    pin: GPIO16
     num_leds: 300
     name: "rgb-lamp"
     restore_mode: RESTORE_DEFAULT_OFF
