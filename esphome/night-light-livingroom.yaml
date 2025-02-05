@@ -46,7 +46,7 @@ light:
     restore_mode: RESTORE_DEFAULT_OFF
     effects:
       - addressable_lambda:
-          name: Fire
+          name: "Fire"
           update_interval: 35ms
           lambda: |-
             const bool colmajor = false;
@@ -187,11 +187,11 @@ light:
               }
             }
       - addressable_rainbow:
-          name: Rainbow Effect With Custom Values
+          name: "Rainbow"
           speed: 30
           width: 300
       - addressable_color_wipe:
-          name: Color Wipe Effect With Custom Values
+          name: "Color_wipe"
           colors:
             - red: 10%
               green: 10%
@@ -203,12 +203,8 @@ light:
               num_leds: 1
           add_led_interval: 100ms
           reverse: False
-      - random:
-          name: "My Fast Random Effect"
-          transition_length: 4s
-          update_interval: 5s
       - strobe:
-          name: Strobe Effect With Custom Values
+          name: "Strobe"
           colors:
             - state: True
               brightness: 100%
@@ -225,10 +221,10 @@ light:
               blue: 0%
               duration: 500ms
       - addressable_scan:
-          name: Scan Effect With Custom Values
+          name: "Scan"
           move_interval: 60ms
       - addressable_fireworks:
-          name: Fireworks Effect With Custom Values
+          name: "Fireworks"
           update_interval: 32ms
           spark_probability: 10%
           use_random_color: false

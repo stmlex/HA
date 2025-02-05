@@ -190,12 +190,42 @@ yandex_smart_home:
     light.night_light_livingroom_rgb_lamp:
       name: "Лампа"
       room: "Гостиная"
+      modes:
+        scene:
+          candle:
+            - "Fire"
+          siren:
+            - "Color_wipe"
+          fantasy:
+            - "Rainbow"
+          garland:
+            - "Fireworks"
     light.night_light_bedroom_rgb_lamp:
       name: "Лампа"
       room: "Спальня"
+      modes:
+        scene:
+          candle:
+            - "Fire"
+          siren:
+            - "Color_wipe"
+          fantasy:
+            - "Rainbow"
+          garland:
+            - "Fireworks"
     light.night_light_childrens_rgb_lamp:
       name: "Лампа"
       room: "Детская"
+      modes:
+        scene:
+          candle:
+            - "Fire"
+          siren:
+            - "Color_wipe"
+          fantasy:
+            - "Rainbow"
+          garland:
+            - "Fireworks"
     media_player.televizor_v_gostinoi_2:
       name: Телевизор
       room: Гостиная
