@@ -1,1 +1,46 @@
-[]
+- id: '1742129401260'
+  alias: Новая автоматизация
+  description: ''
+  triggers:
+  - type: value
+    device_id: 6e28771552ffb00ab81ac7ab21532e2c
+    entity_id: 1655e4613ea27029a6c18dfc8d28fa89
+    domain: sensor
+    trigger: device
+    above: 0
+    below: 100
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 1
+  conditions: []
+  actions:
+  - device_id: 09de26adfaa7db7ce3c5ea2f9a0e0e2f
+    domain: number
+    entity_id: 837a82073d6a054a4fd2fef63db0f80e
+    type: set_value
+    value: 40
+  mode: single
+- id: '1742129407011'
+  alias: Новая автоматизация
+  description: ''
+  triggers:
+  - type: value
+    device_id: 6e28771552ffb00ab81ac7ab21532e2c
+    entity_id: 1655e4613ea27029a6c18dfc8d28fa89
+    domain: sensor
+    trigger: device
+    above: 0
+    below: 100
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 1
+  conditions: []
+  actions:
+  - device_id: 09de26adfaa7db7ce3c5ea2f9a0e0e2f
+    domain: number
+    entity_id: 837a82073d6a054a4fd2fef63db0f80e
+    type: set_value
+    value: 40
+  mode: single

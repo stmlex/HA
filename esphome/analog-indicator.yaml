@@ -1,0 +1,73 @@
+esphome:
+  name: analog-indicator
+  friendly_name: analog-indicator
+          
+esp32:
+  board: lolin_s2_pico
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "2PxkCNR9Yex/xiVfcumnVIBfeiDsAQIb1a0N0QUWmDQ="
+
+ota:
+  - platform: esphome
+    password: "ef5d794406d6bb7488da46341ba2dbe7"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Analog-Indicator"
+    password: !secret ESPHOME_AP_PSW
+
+output:
+  - platform: ledc
+    pin: GPIO11
+    id: pwm_output
+    frequency: 10000 Hz
+
+number:
+  - platform: template
+    name: "level"
+    id: level
+    min_value: 0
+    max_value: 100
+    step: 1
+    optimistic: true
+    on_value: 
+      then:
+        - lambda: |-
+            id(pwm_output).set_level(id(level).state * id(full_scale_limit).state / 100 / 100);
+  - platform: template
+    name: "full_scale_limit"
+    id: full_scale_limit
+    min_value: 0
+    max_value: 100
+    initial_value: 100
+    step: 1
+    optimistic: true
+    restore_value: true
+    on_value: 
+      then:
+        - lambda: |-
+            id(pwm_output).set_level(id(full_scale_limit).state / 100);
+
+# fan:
+#   - platform: speed
+#     id: pwm_duty
+#     name: "PWM"
+#     output: pwm_output
+        
+
+# captive_portal:
+web_server:
+  local: true
+    
+    
