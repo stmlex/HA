@@ -6,6 +6,9 @@ yandex_smart_home:
       - sensor.a4c138a0dbd3_temperature # childrenroom
       - sensor.a4c138aed13a_temperature # kitchen
       - sensor.a4c138b90c73_temperature # balcony
+      - sensor.a4c1386327f1_temperature # bathroom
+      - sensor.a4c138f88e72_temperature # toilet
+      - switch.vannaia_switch
       - binary_sensor.0x00158d0002890189_contact
       - sensor.0x00158d000246651d_action
       - light.rgb_clock
@@ -164,6 +167,25 @@ yandex_smart_home:
           entity: sensor.a4c138b90c73_humidity
     #     - type: battery_level
     #       entity: sensor.a4c138b90c73_battery
+    sensor.a4c138f88e72_temperature:
+      name: Датчик в туалете
+      room: Туалет
+      properties:
+        - type: temperature
+          entity: sensor.a4c138f88e72_temperature
+        - type: humidity
+          entity: sensor.a4c138f88e72_humidity
+    sensor.a4c1386327f1_temperature:
+      name: Датчик ванной
+      room: Ванная
+      properties:
+        - type: temperature
+          entity: sensor.a4c1386327f1_temperature
+        - type: humidity
+          entity: sensor.a4c1386327f1_humidity
+    switch.vannaia_switch:
+      name: Вода
+      room: Ванная
     binary_sensor.0x00158d0002890189_contact:
       name: Датчик входной двери
       room: Прихожая
