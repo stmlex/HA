@@ -31,10 +31,11 @@ automation:
     description: ""
     triggers:
       - trigger: state
+        # entity_id: sensor.nas_memory_usage_real
         entity_id: sensor.nas_cpu_utilization_total
     action:
       - service: number.set_value
         data_template:
           entity_id: number.analog_indicator_level
+          # value: "{{ states('sensor.nas_memory_usage_real') }}"
           value: "{{ states('sensor.nas_cpu_utilization_total') }}"
-          # value: "27"

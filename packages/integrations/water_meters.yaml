@@ -1,0 +1,27 @@
+automation:
+  - id: "bathroom_set_hot_water"
+    alias: bathroom_set_hot_water
+    description: ""
+    triggers:
+      - trigger: state
+        entity_id:
+          - input_number.bathroom_set_hot_water
+    conditions: []
+    action:
+      - service: esphome.water_bathroom_set_total_hot_water_consumption
+        data:
+          value: "{{ states('input_number.bathroom_set_hot_water') | float }}"
+    mode: single
+  - id: "bathroom_set_cold_water"
+    alias: bathroom_set_cold_water
+    description: ""
+    triggers:
+      - trigger: state
+        entity_id:
+          - input_number.bathroom_set_cold_water
+    conditions: []
+    action:
+      - service: esphome.water_bathroom_set_total_cold_water_consumption
+        data:
+          value: "{{ states('input_number.bathroom_set_cold_water') | float }}"
+    mode: single
