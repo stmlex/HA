@@ -30,14 +30,6 @@ api:
             id(total_cold_water_consumption) = value;
             ESP_LOGD("custom", "set_total_cold_water_consumption to: %f", id(total_cold_water_consumption));
 
-  #   - action: set_total_hot_water_consumption
-  #     variables:
-  #       new_total: float
-  #     then:
-  #       - lambda: |-
-  #           id(total_hot_water_consumption) = new_total;
-  #           ESP_LOGD("custom", "set_total_hot_water_consumption to: %f", id(total_hot_water_consumption));
-
 ota:
   - platform: esphome
     password: "aaf281aa6b1b8ebea40c354dc03e68a7"
@@ -61,7 +53,7 @@ text_sensor:
 
 output:
   - platform: slow_pwm
-    pin: GPIO15
+    pin: GPIO16
     id: blue_led
     period: 2s
     max_power: 0.05
@@ -133,25 +125,23 @@ binary_sensor:
       - invert:
       - delayed_on: 500ms
 
-# one_wire:
-#   - platform: gpio
-#     pin: GPIO4
-#     id: one_wire_1
-#   - platform: gpio
-#     pin: GPIO5
-#     id: one_wire_2
+one_wire:
+  - platform: gpio
+    pin: GPIO4
+    id: one_wire_1
+  - platform: gpio
+    pin: GPIO5
+    id: one_wire_2
 
 sensor:
-#   - platform: dallas_temp
-#     # address: 0x1234567812345628
-#     name: hot_water_temperature
-#     one_wire_id: one_wire_1
-#     update_interval: 60s
-#   - platform: dallas_temp
-#     # address: 0x1234567812345628
-#     name: cold_water_temperature
-#     one_wire_id: one_wire_2
-#     update_interval: 60s
+  - platform: dallas_temp
+    name: hot_water_temperature
+    one_wire_id: one_wire_1
+    update_interval: 60s
+  - platform: dallas_temp
+    name: cold_water_temperature
+    one_wire_id: one_wire_2
+    update_interval: 60s
 
   - platform: template
     name: "Total hot water consumption"
