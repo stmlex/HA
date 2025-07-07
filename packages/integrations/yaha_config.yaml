@@ -9,6 +9,8 @@ yandex_smart_home:
       - sensor.a4c1386327f1_temperature # bathroom
       - sensor.a4c138f88e72_temperature # toilet
       - switch.vannaia_switch
+      - sensor.water_bathroom_total_hot_water_consumption
+      - sensor.water_bathroom_total_cold_water_consumption
       - binary_sensor.0x00158d0002890189_contact
       - sensor.0x00158d000246651d_action
       - light.rgb_clock
@@ -186,6 +188,24 @@ yandex_smart_home:
     switch.vannaia_switch:
       name: Вода
       room: Ванная
+    sensor.water_bathroom_total_hot_water_consumption:
+      name: Счетчик горячей воды
+      room: Ванная
+      properties:
+        - type: water_meter
+          unit_of_measurement: m3
+          entity: sensor.water_bathroom_total_hot_water_consumption
+        - type: temperature
+          entity: sensor.water_bathroom_hot_water_temperature
+    sensor.water_bathroom_total_cold_water_consumption:
+      name: Счетчик холодной воды
+      room: Ванная
+      properties:
+        - type: water_meter
+          unit_of_measurement: m3
+          entity: sensor.water_bathroom_total_cold_water_consumption
+        - type: temperature
+          entity: sensor.water_bathroom_cold_water_temperature
     binary_sensor.0x00158d0002890189_contact:
       name: Датчик входной двери
       room: Прихожая
