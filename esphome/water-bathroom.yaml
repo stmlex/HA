@@ -146,14 +146,18 @@ sensor:
   - platform: template
     name: "Total hot water consumption"
     device_class: water
+    state_class: total_increasing
     unit_of_measurement: "m3"
+    icon: "mdi:counter"
     accuracy_decimals: 3
     lambda: |-
       return id(total_hot_water_consumption);
   - platform: template
     name: "Total cold water consumption"
     device_class: water
+    state_class: total_increasing
     unit_of_measurement: "m3"
+    icon: "mdi:counter"
     accuracy_decimals: 3
     lambda: |-
       return id(total_cold_water_consumption);
