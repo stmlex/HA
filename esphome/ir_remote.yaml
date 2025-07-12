@@ -1,0 +1,99 @@
+esphome:
+  name: ir_remote
+
+esp8266:
+  board: esp_wroom_02
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "u1bN/VcPi+MBj4bfMRkCRa6vpwRWyhBl0BiEK0/gzAA="
+
+ota:
+  - platform: esphome
+    password: "75093ab63a9361bfdd29b893dde0d778"
+
+wifi:
+  ssid: "ALEX_NET"
+  password: "ac0250687"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "IR-Remote"
+    password: "1234567890"
+
+climate:
+  - platform: whirlpool       # adjust to match your AC unit!
+    name: "Air_cooler"
+    # model: DG11J1-91
+    model: DG11J1-39
+    transmitter_id: remote_transmitter_id
+
+output:
+  - platform: slow_pwm
+    pin: GPIO4
+    id: blue_led
+    period: 2s
+    max_power: 0.05
+
+light:
+  - platform: binary
+    name: "status_led"
+    output: blue_led
+    id: status_led
+    restore_mode: ALWAYS_ON
+
+remote_receiver:
+  id: remote_receiver_id
+  pin:
+    number: GPIO5
+    inverted: true
+    mode:
+      input: true
+      pullup: true
+  dump: raw
+
+remote_transmitter:
+  id: remote_transmitter_id
+  pin: GPIO14
+  carrier_duty_percent: 50%
+
+button:
+  - platform: template
+    name: "Garland_power"
+    id: Garland_power
+    icon: "mdi:power"
+    on_press:
+      - remote_transmitter.transmit_raw:
+          code: [9557, -4555, 588, -552, 613, -608, 559, -581, 584, -612, 562, -578, 589, -594, 598, -555, 588, -609, 565, -1687, 590, -1664, 616, -1689, 593, -1690, 587, -556, 614, -1693, 585, -1669, 638, -1667, 587, -1668, 612, -1669, 611, -583, 614, -555, 587, -581, 588, -581, 585, -582, 588, -582, 589, -580, 592, -577, 587, -1695, 590, -1691, 561, -1720, 592, -1693, 585, -1669, 638, -1670, 588]
+          carrier_frequency: 38kHz
+
+  - platform: template
+    name: "Garland_effect"
+    id: Garland_effect
+    icon: "mdi:autorenew"
+    on_press:
+      - remote_transmitter.transmit_raw:
+          code: [9149, -4514, 556, -557, 579, -560, 577, -560, 583, -582, 576, -535, 578, -563, 578, -559, 578, -585, 558, -1683, 578, -1710, 552, -1688, 575, -1693, 577, -585, 577, -1663, 578, -1714, 551, -1689, 590, -1675, 580, -1688, 579, -558, 578, -1713, 551, -588, 553, -584, 551, -563, 576, -562, 576, -588, 573, -538, 579, -1686, 579, -563, 574, -1688, 578, -1686, 578, -1688, 579, -1685, 579]
+          carrier_frequency: 38kHz
+
+switch:
+  - platform: template
+    name: "Garland_On_Off"
+    restore_mode: DISABLED
+    turn_on_action:
+      - remote_transmitter.transmit_raw:
+          code: [9557, -4555, 588, -552, 613, -608, 559, -581, 584, -612, 562, -578, 589, -594, 598, -555, 588, -609, 565, -1687, 590, -1664, 616, -1689, 593, -1690, 587, -556, 614, -1693, 585, -1669, 638, -1667, 587, -1668, 612, -1669, 611, -583, 614, -555, 587, -581, 588, -581, 585, -582, 588, -582, 589, -580, 592, -577, 587, -1695, 590, -1691, 561, -1720, 592, -1693, 585, -1669, 638, -1670, 588]
+          carrier_frequency: 38kHz
+    turn_off_action:
+      - remote_transmitter.transmit_raw:
+          code: [9557, -4555, 588, -552, 613, -608, 559, -581, 584, -612, 562, -578, 589, -594, 598, -555, 588, -609, 565, -1687, 590, -1664, 616, -1689, 593, -1690, 587, -556, 614, -1693, 585, -1669, 638, -1667, 587, -1668, 612, -1669, 611, -583, 614, -555, 587, -581, 588, -581, 585, -582, 588, -582, 589, -580, 592, -577, 587, -1695, 590, -1691, 561, -1720, 592, -1693, 585, -1669, 638, -1670, 588]
+          carrier_frequency: 38kHz
+
+captive_portal:
+
+web_server:
+  local: true

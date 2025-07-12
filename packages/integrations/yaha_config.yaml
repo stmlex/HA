@@ -28,10 +28,10 @@ yandex_smart_home:
       - light.night_light_livingroom_rgb_lamp
       - light.night_light_bedroom_rgb_lamp
       - light.night_light_childrens_rgb_lamp
-      - switch.garland_on_off
-      # - climate.air_cooler
       # - button.garland_power_2
-      # - climate.air_cooler_2
+      - switch.garland_on_off
+      - climate.ir_remote_air_cooler
+      - climate.air_cooler_2
   # color_profile:
   #   profile_clock:
   #     red: ["255", "0", "0"]
@@ -49,12 +49,12 @@ yandex_smart_home:
     #       turn_off:
     #         service: button.press
     #         entity_id: button.garland_effect
-    # climate.air_cooler:
-    #   name: Кондиционер
-    #   room: Детская
-    # climate.air_cooler_2:
-    #   name: Кондиционер
-    #   room: Спальня
+    climate.ir_remote_air_cooler:
+      name: Кондиционер
+      room: Детская
+    climate.air_cooler_2:
+      name: Кондиционер
+      room: Спальня
     switch.garland_on_off:
       name: Гирлянда
       room: Спальня
