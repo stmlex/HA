@@ -31,7 +31,7 @@ yandex_smart_home:
       # - button.garland_power_2
       - switch.garland_on_off
       - climate.ir_remote_air_cooler
-      - climate.air_cooler_2
+      - climate.air_cooler
   # color_profile:
   #   profile_clock:
   #     red: ["255", "0", "0"]
@@ -52,9 +52,19 @@ yandex_smart_home:
     climate.ir_remote_air_cooler:
       name: Кондиционер
       room: Детская
-    climate.air_cooler_2:
+      turn_on:
+        action: climate.set_hvac_mode
+        entity_id: climate.ir_remote_air_cooler
+        data:
+          hvac_mode: cool
+    climate.air_cooler:
       name: Кондиционер
       room: Спальня
+      turn_on:
+        action: climate.set_hvac_mode
+        entity_id: climate.air_cooler
+        data:
+          hvac_mode: cool
     switch.garland_on_off:
       name: Гирлянда
       room: Спальня
