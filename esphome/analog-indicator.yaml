@@ -32,6 +32,18 @@ output:
     pin: GPIO11
     id: pwm_output
     frequency: 10000 Hz
+  - platform: slow_pwm
+    pin: GPIO15
+    id: blue_led
+    period: 2s
+    max_power: 0.05
+
+light:
+  - platform: binary
+    name: "status_led"
+    output: blue_led
+    id: status_led
+    restore_mode: ALWAYS_ON
 
 number:
   - platform: template

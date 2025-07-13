@@ -28,14 +28,14 @@ automation:
           message: "Дверь🚪"
   - id: "Analog_indicator"
     alias: "Analog_indicator"
+    variables:
+      temperature: "{{ states('sensor.water_bathroom_hot_water_temperature') | float }}"
     description: ""
     triggers:
       - trigger: state
-        # entity_id: sensor.nas_memory_usage_real
-        entity_id: sensor.nas_cpu_utilization_total
+        entity_id: sensor.water_bathroom_hot_water_temperature
     action:
       - service: number.set_value
         data_template:
           entity_id: number.analog_indicator_level
-          # value: "{{ states('sensor.nas_memory_usage_real') }}"
-          value: "{{ states('sensor.nas_cpu_utilization_total') }}"
+          value: "{{ temperature }}"
