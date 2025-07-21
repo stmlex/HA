@@ -17,14 +17,6 @@ input_number:
     max: 1000000
     step: 0.001
     icon: mdi:water
-  test_button:
-    name: test_button
-    unit_of_measurement: "℃"
-    mode: box
-    initial: 40
-    min: 20
-    max: 95
-    step: 0.1
 
 input_text:
   bathroom_hot_water_state:
@@ -59,7 +51,7 @@ automation:
                   entity_id: input_text.bathroom_hot_water_state
                 data:
                   value: "normal"
-              - service: telegram_bot.send_message
+              - action: telegram_bot.send_message
                 data:
                   message: >
                     Температура воды в ванной в норме: {{ temperature }}°C
@@ -76,7 +68,7 @@ automation:
                   entity_id: input_text.bathroom_hot_water_state
                 data:
                   value: "cold"
-              - service: telegram_bot.send_message
+              - action: telegram_bot.send_message
                 data:
                   message: >
                     Температура воды в ванной меньше {{ lower_treshold }}°C
@@ -92,10 +84,10 @@ automation:
         entity_id:
           - input_number.bathroom_set_hot_water
     action:
-      - service: esphome.water_bathroom_set_total_hot_water_consumption
+      - action: esphome.water_bathroom_set_total_hot_water_consumption
         data:
           value: "{{ new_consumption }}"
-      - service: telegram_bot.send_message
+      - action: telegram_bot.send_message
         data:
           message: >
             Установлены показания счетчика горячей воды в ванной: {{ new_consumption }}m3
@@ -111,10 +103,10 @@ automation:
         entity_id:
           - input_number.bathroom_set_cold_water
     action:
-      - service: esphome.water_bathroom_set_total_cold_water_consumption
+      - action: esphome.water_bathroom_set_total_cold_water_consumption
         data:
           value: "{{ new_consumption }}"
-      - service: telegram_bot.send_message
+      - action: telegram_bot.send_message
         data:
           message: >
             Установлены показания счетчика холодной воды в ванной: {{ new_consumption }}m3

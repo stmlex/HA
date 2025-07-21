@@ -1,0 +1,112 @@
+input_number:
+  toilet_set_hot_water:
+    name: toilet_set_hot_water
+    unit_of_measurement: "m3"
+    mode: box
+    initial: 100
+    min: 0
+    max: 1000000
+    step: 0.001
+    icon: mdi:water
+  toilet_set_cold_water:
+    name: toilet_set_cold_water
+    unit_of_measurement: "m3"
+    mode: box
+    initial: 100
+    min: 0
+    max: 1000000
+    step: 0.001
+    icon: mdi:water
+
+input_text:
+  toilet_hot_water_state:
+    name: toilet_hot_water_state
+    initial: "unnown"
+
+automation:
+  - id: toilet_hot_water_state_message
+    alias: toilet_hot_water_state_message
+    description: ""
+    variables:
+      upper_treshold: 50
+      lower_treshold: 40
+      temperature: "{{ states('sensor.water_toilet_hot_water_temperature') | float }}"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - sensor.water_toilet_hot_water_temperature
+    action:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >
+                  {{ temperature > upper_treshold }}
+              - condition: template
+                value_template: >
+                  {{ states('input_text.toilet_hot_water_state') != "normal" }}
+            sequence:
+              - action: input_text.set_value
+                target:
+                  entity_id: input_text.toilet_hot_water_state
+                data:
+                  value: "normal"
+              - action: telegram_bot.send_message
+                data:
+                  message: >
+                    Температура воды в туалете в норме: {{ temperature }}°C
+          - conditions:
+              - condition: template
+                value_template: >
+                  {{ temperature < lower_treshold }}
+              - condition: template
+                value_template: >
+                  {{ states('input_text.toilet_hot_water_state') != "cold" }}
+            sequence:
+              - action: input_text.set_value
+                target:
+                  entity_id: input_text.toilet_hot_water_state
+                data:
+                  value: "cold"
+              - action: telegram_bot.send_message
+                data:
+                  message: >
+                    Температура воды в туалете меньше {{ lower_treshold }}°C
+
+  - id: "toilet_set_hot_water"
+    alias: toilet_set_hot_water
+    description: ""
+    mode: single
+    variables:
+      new_consumption: "{{ states('input_number.toilet_set_hot_water') | float }}"
+    triggers:
+      - trigger: state
+        entity_id:
+          - input_number.toilet_set_hot_water
+    action:
+      - action: esphome.water_toilet_set_total_hot_water_consumption
+        data:
+          value: "{{ new_consumption }}"
+      - action: telegram_bot.send_message
+        data:
+          message: >
+            Установлены показания счетчика горячей воды в туалете: {{ new_consumption }}m3
+
+  - id: "toilet_set_cold_water"
+    alias: toilet_set_cold_water
+    description: ""
+    mode: single
+    variables:
+      new_consumption: "{{ states('input_number.toilet_set_cold_water') | float }}"
+    triggers:
+      - trigger: state
+        entity_id:
+          - input_number.toilet_set_cold_water
+    action:
+      - action: esphome.water_toilet_set_total_cold_water_consumption
+        data:
+          value: "{{ new_consumption }}"
+      - action: telegram_bot.send_message
+        data:
+          message: >
+            Установлены показания счетчика холодной воды в туалете: {{ new_consumption }}m3

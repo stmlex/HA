@@ -1,0 +1,164 @@
+esphome:
+  name: water-toilet
+  friendly_name: water-toilet
+
+esp32:
+  board: lolin_s2_pico
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "0yiOCnCwJga8Z5APZnUX8tDIyMApTgr41mApgwkqrVA="
+  services:
+    - service: set_total_hot_water_consumption
+      variables:
+        value: float
+      then:
+        - lambda: |-
+            id(total_hot_water_consumption) = value;
+            ESP_LOGD("custom", "set_total_hot_water_consumption to: %f", id(total_hot_water_consumption));
+    - service: set_total_cold_water_consumption
+      variables:
+        value: float
+      then:
+        - lambda: |-
+            id(total_cold_water_consumption) = value;
+            ESP_LOGD("custom", "set_total_cold_water_consumption to: %f", id(total_cold_water_consumption));
+
+ota:
+  - platform: esphome
+    password: "516740d4cdbeff8546a53bebd2294c52"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Water-Toilet"
+    password: !secret ESPHOME_AP_PSW
+
+web_server:
+  local: true
+
+text_sensor:
+  - platform: homeassistant
+    id: weather_fom_ha
+    entity_id: sensor.weather_forecast
+
+output:
+  - platform: slow_pwm
+    pin: GPIO16
+    id: blue_led
+    period: 2s
+    max_power: 0.05
+  - platform: gpio
+    pin: GPIO39
+    id: red_led
+  - platform: gpio
+    pin: GPIO40
+    id: green_led
+
+light:
+  - platform: binary
+    name: "status_led"
+    output: blue_led
+    id: status_led
+    restore_mode: ALWAYS_ON
+  - platform: binary
+    id: hot_water_led
+    internal: true
+    output: red_led
+  - platform: binary
+    id: cold_water_led
+    internal: true
+    output: green_led
+
+globals:
+  - id: total_hot_water_consumption
+    type: float
+    restore_value: true
+    initial_value: '0.1'
+  - id: total_cold_water_consumption
+    type: float
+    restore_value: true
+    initial_value: '0.1'
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO2
+    name: "hot_water_pulse_meter"
+    id: hot_water_pulse_meter
+    internal: true
+    on_press:
+      then:
+        - light.turn_on:
+            id: hot_water_led
+        - delay: 0.2s
+        - light.turn_off:
+            id: hot_water_led
+        - lambda: |-
+            id(total_hot_water_consumption) += 0.01;
+    filters:
+      - invert:
+      - delayed_on: 500ms
+  - platform: gpio
+    pin: GPIO3
+    name: "cold_water_pulse_meter"
+    id: cold_water_pulse_meter
+    internal: true
+    on_press:
+      then:
+        - light.turn_on:
+            id: cold_water_led
+        - delay: 0.2s
+        - light.turn_off:
+            id: cold_water_led
+        - lambda: |-
+            id(total_cold_water_consumption) += 0.01;
+    filters:
+      - invert:
+      - delayed_on: 500ms
+
+one_wire:
+  - platform: gpio
+    pin: GPIO4
+    id: one_wire_1
+  - platform: gpio
+    pin: GPIO5
+    id: one_wire_2
+
+sensor:
+  - platform: dallas_temp
+    name: hot_water_temperature
+    one_wire_id: one_wire_1
+    update_interval: 60s
+  - platform: dallas_temp
+    name: cold_water_temperature
+    one_wire_id: one_wire_2
+    update_interval: 60s
+
+  - platform: template
+    name: "Total hot water consumption"
+    device_class: water
+    state_class: total_increasing
+    unit_of_measurement: "m3"
+    icon: "mdi:counter"
+    accuracy_decimals: 3
+    lambda: |-
+      return id(total_hot_water_consumption);
+  - platform: template
+    name: "Total cold water consumption"
+    device_class: water
+    state_class: total_increasing
+    unit_of_measurement: "m3"
+    icon: "mdi:counter"
+    accuracy_decimals: 3
+    lambda: |-
+      return id(total_cold_water_consumption);
+    
