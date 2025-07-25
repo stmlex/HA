@@ -1,0 +1,28 @@
+blueprint:
+  name: water_meter_automation
+  description: Get water-meter data and notify state
+  domain: automation
+  author: MAA
+  input:
+    set_hot_water_consumption:
+      description: Input number to set correct consumption entity_id
+    set_cold_water_consumption:
+      description: Input number to set correct consumption entity_id
+    set_hot_water_consumption_service:
+      description: set hot water consumption service entity_id
+    set_cold_water_consumption_service:
+      description: set cold water consumption service entity_id
+    hot_water_temperature_state:
+      description: Input text text helper state keeper entity_id
+    hot_water_temperature:
+      description: Hot water temperature sensor entity_id
+    cold_water_temperature:
+      description: Cold water temperature sensor entity_id
+    upper_temperature_treshold:
+      description: Upper treshold hot water temperature notification
+    lower_temperature_treshold:
+      description: Lower treshold hot water temperature notification
+    location_name:
+      description: Location name for notification text append
+    messendger:
+      description: Messenger entity_id
