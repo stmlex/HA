@@ -1,7 +1,7 @@
 input_number:
   bathroom_set_hott_water:
     name: Bathroom_set_hot_water
-    unit_of_measurement: "m3"
+    unit_of_measurement: "m³"
     mode: box
     initial: 100
     min: 0
@@ -10,7 +10,7 @@ input_number:
     icon: mdi:water
   bathroom_set_cold_water:
     name: Bathroom_set_cold_water
-    unit_of_measurement: "m3"
+    unit_of_measurement: "m³"
     mode: box
     initial: 100
     min: 0
@@ -90,7 +90,7 @@ automation:
       - action: telegram_bot.send_message
         data:
           message: >
-            Установлены показания счетчика горячей воды в ванной: {{ new_consumption }}m3
+            Установлены показания счетчика горячей воды в ванной: {{ new_consumption }}m³
 
   - id: "bathroom_set_cold_water"
     alias: bathroom_set_cold_water
@@ -109,4 +109,4 @@ automation:
       - action: telegram_bot.send_message
         data:
           message: >
-            Установлены показания счетчика холодной воды в ванной: {{ new_consumption }}m3
+            Установлены показания счетчика холодной воды в ванной: {{ new_consumption }}m³

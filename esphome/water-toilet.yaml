@@ -43,8 +43,8 @@ wifi:
     ssid: "Water-Toilet"
     password: !secret ESPHOME_AP_PSW
 
-web_server:
-  local: true
+# web_server:
+#   local: true
 
 text_sensor:
   - platform: homeassistant
@@ -147,7 +147,7 @@ sensor:
     name: "Total hot water consumption"
     device_class: water
     state_class: total_increasing
-    unit_of_measurement: "m3"
+    unit_of_measurement: "m³"
     icon: "mdi:counter"
     accuracy_decimals: 3
     lambda: |-
@@ -156,7 +156,7 @@ sensor:
     name: "Total cold water consumption"
     device_class: water
     state_class: total_increasing
-    unit_of_measurement: "m3"
+    unit_of_measurement: "m³"
     icon: "mdi:counter"
     accuracy_decimals: 3
     lambda: |-

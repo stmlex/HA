@@ -43,8 +43,8 @@ wifi:
     ssid: "Water-Bathroom"
     password: !secret ESPHOME_AP_PSW
 
-web_server:
-  local: true
+# web_server:
+#   local: true
 
 text_sensor:
   - platform: homeassistant
@@ -83,11 +83,11 @@ globals:
   - id: total_hot_water_consumption
     type: float
     restore_value: true
-    initial_value: '100'
+    initial_value: '0.1'
   - id: total_cold_water_consumption
     type: float
     restore_value: true
-    initial_value: '100'
+    initial_value: '0.1'
 
 binary_sensor:
   - platform: gpio
@@ -147,7 +147,7 @@ sensor:
     name: "Total hot water consumption"
     device_class: water
     state_class: total_increasing
-    unit_of_measurement: "m3"
+    unit_of_measurement: "m³"
     icon: "mdi:counter"
     accuracy_decimals: 3
     lambda: |-
@@ -156,7 +156,7 @@ sensor:
     name: "Total cold water consumption"
     device_class: water
     state_class: total_increasing
-    unit_of_measurement: "m3"
+    unit_of_measurement: "m³"
     icon: "mdi:counter"
     accuracy_decimals: 3
     lambda: |-
