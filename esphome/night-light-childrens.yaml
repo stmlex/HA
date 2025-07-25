@@ -13,8 +13,8 @@ esp32:
   framework:
     type: arduino
 
-watchdog:
-  timeout: 60s
+# watchdog:
+#   timeout: 60s
   
 # Enable logging
 logger:
@@ -235,5 +235,5 @@ light:
           use_random_color: false
           fade_out_rate: 120
 
-captive_portal:
+# captive_portal:
     

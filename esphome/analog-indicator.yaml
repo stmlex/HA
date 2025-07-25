@@ -70,12 +70,10 @@ number:
       then:
         - lambda: |-
             id(pwm_output).set_level(id(full_scale_limit).state / 100);
-
-# fan:
-#   - platform: speed
-#     id: pwm_duty
-#     name: "PWM"
-#     output: pwm_output
+sensor:
+  - platform: internal_temperature
+    name: "CPU Temperature"
+    update_interval: 60s
         
 
 # captive_portal:

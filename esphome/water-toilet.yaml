@@ -43,14 +43,6 @@ wifi:
     ssid: "Water-Toilet"
     password: !secret ESPHOME_AP_PSW
 
-# web_server:
-#   local: true
-
-text_sensor:
-  - platform: homeassistant
-    id: weather_fom_ha
-    entity_id: sensor.weather_forecast
-
 output:
   - platform: slow_pwm
     pin: GPIO16
@@ -134,6 +126,9 @@ one_wire:
     id: one_wire_2
 
 sensor:
+  - platform: internal_temperature
+    name: "CPU Temperature"
+    update_interval: 60s
   - platform: dallas_temp
     name: hot_water_temperature
     one_wire_id: one_wire_1
