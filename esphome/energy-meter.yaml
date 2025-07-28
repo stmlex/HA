@@ -1,0 +1,104 @@
+esphome:
+  name: energy-meter
+  friendly_name: energy-meter
+
+esp32:
+  board: lolin_s2_pico
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "1KMOFqNNhyid5ZQgio7PkjQ8/1X0Q8rcrLyo2fUT2nM="
+  services:
+    - service: set_total_daily_consumption
+      variables:
+        value: float
+      then:
+        - lambda: |-
+            id(total_daily_consumption) = value;
+            ESP_LOGD("custom", "set_total_daily_consumption to: %f", id(total_daily_consumption));
+    - service: set_energy_pulse_ratio
+      variables:
+        value: float
+      then:
+        - lambda: |-
+            id(energy_pulse_ratio) = value;
+            ESP_LOGD("custom", "set_energy_pulse_ratio to: %f", id(energy_pulse_ratio));
+
+ota:
+  - platform: esphome
+    password: "cd07909de463a6dd9f39d4a8c61e521d"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  ap:
+    ssid: "Energy-Meter"
+    password: !secret ESPHOME_AP_PSW
+
+output:
+  - platform: gpio
+    pin: GPIO15
+    id: blue_led
+
+light:
+  - platform: binary
+    id: pulse_led
+    internal: true
+    output: blue_led
+
+globals:
+  - id: total_daily_consumption
+    type: float
+    restore_value: true
+    initial_value: '0.1'
+  - id: energy_pulse_ratio
+    type: float
+    restore_value: true
+    initial_value: '0.0003125'
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO5
+    name: "enegry_pulse_meter"
+    id: energy_pulse_meter
+    internal: true
+    on_press:
+      then:
+        - light.turn_on:
+            id: pulse_led
+        - delay: 20ms
+        - light.turn_off:
+            id: pulse_led
+        - lambda: |-
+            id(total_daily_consumption) += id(energy_pulse_ratio);
+    filters:
+      - invert:
+      - delayed_on: 5ms
+
+sensor:
+  - platform: internal_temperature
+    name: "CPU Temperature"
+    update_interval: 60s
+  - platform: template
+    name: "Total energy consumption"
+    device_class: energy
+    state_class: total_increasing
+    unit_of_measurement: "kWh"
+    icon: "mdi:counter"
+    accuracy_decimals: 2
+    lambda: |-
+      return id(total_daily_consumption);
+        
+
+# captive_portal:
+web_server:
+  local: true
+    
+    
