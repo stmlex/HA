@@ -15,20 +15,34 @@ api:
   encryption:
     key: "1KMOFqNNhyid5ZQgio7PkjQ8/1X0Q8rcrLyo2fUT2nM="
   services:
-    - service: set_total_daily_consumption
+    - service: set_total_t1
       variables:
         value: float
       then:
         - lambda: |-
-            id(total_daily_consumption) = value;
-            ESP_LOGD("custom", "set_total_daily_consumption to: %f", id(total_daily_consumption));
-    - service: set_energy_pulse_ratio
+            id(static_total_t1) = value;
+            ESP_LOGD("custom", "set_total_t1 to: %f", value);
+    - service: set_total_t2
       variables:
         value: float
       then:
         - lambda: |-
-            id(energy_pulse_ratio) = value;
-            ESP_LOGD("custom", "set_energy_pulse_ratio to: %f", id(energy_pulse_ratio));
+            id(static_total_t2) = value;
+            ESP_LOGD("custom", "set_total_t2 to: %f", value);
+    # - service: set_energy_pulse_ratio
+    #   variables:
+    #     value: float
+    #   then:
+    #     - lambda: |-
+    #         id(energy_pulse_ratio) = value;
+    #         ESP_LOGD("custom", "set_energy_pulse_ratio to: %f", value);
+    # - service: set_power_pulse_ratio
+    #   variables:
+    #     value: float
+    #   then:
+    #     - lambda: |-
+    #         id(power_pulse_ratio) = value;
+    #         ESP_LOGD("custom", "set_power_pulse_ratio to: %f", value);
 
 ota:
   - platform: esphome
@@ -54,13 +68,21 @@ light:
     output: blue_led
 
 globals:
-  - id: total_daily_consumption
+  - id: static_total_t1
     type: float
     restore_value: true
-    initial_value: '0.1'
+    initial_value: '0.11'
+  - id: static_total_t2
+    type: float
+    restore_value: true
+    initial_value: '0.22'
+  - id: power_pulse_ratio
+    type: float
+    restore_value: true
+    initial_value: '18.75'
   - id: energy_pulse_ratio
     type: float
-    restore_value: true
+    restore_value: false
     initial_value: '0.0003125'
 
 binary_sensor:
@@ -77,7 +99,12 @@ binary_sensor:
         - light.turn_off:
             id: pulse_led
         - lambda: |-
-            id(total_daily_consumption) += id(energy_pulse_ratio);
+            int hour = id(homeassistant_time).now().hour;
+            if (hour >= 7 && hour < 23) {
+              id(static_total_t1) += id(energy_pulse_ratio);
+            } else {
+              id(static_total_t2) += id(energy_pulse_ratio);
+            }      
     filters:
       - invert:
       - delayed_on: 5ms
@@ -87,18 +114,33 @@ sensor:
     name: "CPU Temperature"
     update_interval: 60s
   - platform: template
-    name: "Total energy consumption"
+    name: "total_t1"
     device_class: energy
     state_class: total_increasing
     unit_of_measurement: "kWh"
-    icon: "mdi:counter"
+    icon: "mdi:lightning-bolt"
     accuracy_decimals: 2
     lambda: |-
-      return id(total_daily_consumption);
+      return id(static_total_t1);
+    update_interval: 60s
+  - platform: template
+    name: "total_t2"
+    device_class: energy
+    state_class: total_increasing
+    unit_of_measurement: "kWh"
+    icon: "mdi:lightning-bolt"
+    accuracy_decimals: 2
+    lambda: |-
+      return id(static_total_t2);
+    update_interval: 60s
         
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    timezone: "Europe/Moscow"
 
 # captive_portal:
-web_server:
-  local: true
+# web_server:
+#   local: true
     
     

@@ -1,0 +1,57 @@
+input_number:
+  energy_set_total_t1:
+    name: energy_set_total_t1
+    unit_of_measurement: "kWh"
+    mode: box
+    initial: 1
+    min: 0
+    max: 1000000
+    step: 1
+    icon: mdi:lightning-bolt
+  energy_set_total_t2:
+    name: energy_set_total_t2
+    unit_of_measurement: "kWh"
+    mode: box
+    initial: 1
+    min: 0
+    max: 1000000
+    step: 1
+    icon: mdi:lightning-bolt
+
+automation:
+  - id: "energy_set_total_t1"
+    alias: energy_set_total_t1
+    description: ""
+    mode: single
+    variables:
+      new_total: "{{ states('input_number.energy_set_total_t1') | float }}"
+    triggers:
+      - trigger: state
+        entity_id:
+          - input_number.energy_set_total_t1
+    action:
+      - action: esphome.energy_meter_set_total_t1
+        data:
+          value: "{{ new_total }}"
+      - action: telegram_bot.send_message
+        data:
+          message: >
+            Установлены показания счетчика энергии Т1: {{ new_total }}kWh
+  - id: "energy_set_total_t2"
+    alias: energy_set_total_t2
+    description: ""
+    mode: single
+    variables:
+      new_total: "{{ states('input_number.energy_set_total_t2') | float }}"
+    triggers:
+      - trigger: state
+        entity_id:
+          - input_number.energy_set_total_t2
+    action:
+      - action: esphome.energy_meter_set_total_t2
+        data:
+          value: "{{ new_total }}"
+      - action: telegram_bot.send_message
+        data:
+          message: >
+            Установлены показания счетчика энергии Т2: {{ new_total }}kWh
