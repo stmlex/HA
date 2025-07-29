@@ -9,6 +9,9 @@ esp32:
 
 # Enable logging
 logger:
+  logs:
+    light: NONE 
+    binary_sensor: NONE
 
 # Enable Home Assistant API
 api:
@@ -29,20 +32,25 @@ api:
         - lambda: |-
             id(static_total_t2) = value;
             ESP_LOGD("custom", "set_total_t2 to: %f", value);
-    # - service: set_energy_pulse_ratio
-    #   variables:
-    #     value: float
-    #   then:
-    #     - lambda: |-
-    #         id(energy_pulse_ratio) = value;
-    #         ESP_LOGD("custom", "set_energy_pulse_ratio to: %f", value);
-    # - service: set_power_pulse_ratio
-    #   variables:
-    #     value: float
-    #   then:
-    #     - lambda: |-
-    #         id(power_pulse_ratio) = value;
-    #         ESP_LOGD("custom", "set_power_pulse_ratio to: %f", value);
+    - service: set_pulse_ratio
+      variables:
+        value: int
+      then:
+        - lambda: |-
+            id(energy_pulse_ratio) = 1 / (double)value;
+            ESP_LOGD("custom", "set_pulse_ratio to: %f", value);
+    - service: set_power_average_factor
+      variables:
+        value: float
+      then:
+        - lambda: |-
+            if((value > 1) or (value < 0)) {
+              ESP_LOGD("ERROR", "wrong power average value!");
+            }
+            else {
+              id(average_factor) = value;
+              ESP_LOGD("custom", "set_power_average_factor to: %f", value);
+            }
 
 ota:
   - platform: esphome
@@ -57,33 +65,57 @@ wifi:
     password: !secret ESPHOME_AP_PSW
 
 output:
-  - platform: gpio
+  # - platform: gpio
+  #   pin: GPIO15
+  #   id: blue_led
+  - platform: slow_pwm
     pin: GPIO15
     id: blue_led
+    period: 2s
+    max_power: 0.05
 
 light:
+  # - platform: binary
+  #   id: pulse_led
+  #   internal: true
+  #   output: blue_led
   - platform: binary
-    id: pulse_led
-    internal: true
+    name: "status_led"
     output: blue_led
+    id: status_led
+    restore_mode: ALWAYS_ON
 
 globals:
   - id: static_total_t1
-    type: float
+    type: double
     restore_value: true
     initial_value: '0.11'
+
   - id: static_total_t2
-    type: float
+    type: double
     restore_value: true
     initial_value: '0.22'
-  - id: power_pulse_ratio
+
+  - id: energy_pulse_ratio
+    type: double
+    restore_value: true
+    initial_value: '0.0003125'
+
+  - id: current_power
+    type: float
+    restore_value: False
+    initial_value: '0.0'
+
+  - id: average_factor
     type: float
     restore_value: true
-    initial_value: '18.75'
-  - id: energy_pulse_ratio
-    type: float
-    restore_value: false
-    initial_value: '0.0003125'
+    initial_value: '0.1'
+
+interval:
+  - interval: 5s  # Каждые 5 секунд
+    then:
+      - lambda: |-
+          ESP_LOGD("custom", "power average: %f W", id(current_power));
 
 binary_sensor:
   - platform: gpio
@@ -93,26 +125,42 @@ binary_sensor:
     internal: true
     on_press:
       then:
-        - light.turn_on:
-            id: pulse_led
-        - delay: 20ms
-        - light.turn_off:
-            id: pulse_led
         - lambda: |-
+            // energy measurement
             int hour = id(homeassistant_time).now().hour;
             if (hour >= 7 && hour < 23) {
               id(static_total_t1) += id(energy_pulse_ratio);
             } else {
               id(static_total_t2) += id(energy_pulse_ratio);
-            }      
+            }
+            // power measurement
+            static uint32_t last_trigger_millis = 0;
+            if (last_trigger_millis != 0) {
+              uint32_t interval = millis() - last_trigger_millis;
+              // ESP_LOGD("custom", "pulse period: %d ms", interval);
+              if(interval) {
+                float W = 1000*id(energy_pulse_ratio)*3600000/interval;
+                // ESP_LOGD("custom", "power: %f W", W);
+                static float prev_power = 0;
+                id(current_power) += (W - id(current_power))*id(average_factor);
+              }
+            }
+            last_trigger_millis = millis();
+            
+        # - light.turn_on:
+        #     id: pulse_led
+        # - delay: 20ms
+        # - light.turn_off:
+        #     id: pulse_led
     filters:
       - invert:
-      - delayed_on: 5ms
+      - delayed_on: 1ms
 
 sensor:
   - platform: internal_temperature
     name: "CPU Temperature"
     update_interval: 60s
+
   - platform: template
     name: "total_t1"
     device_class: energy
@@ -123,6 +171,7 @@ sensor:
     lambda: |-
       return id(static_total_t1);
     update_interval: 60s
+    
   - platform: template
     name: "total_t2"
     device_class: energy
@@ -133,6 +182,17 @@ sensor:
     lambda: |-
       return id(static_total_t2);
     update_interval: 60s
+  
+  - platform: template
+    name: "power"
+    device_class: energy
+    state_class: measurement
+    unit_of_measurement: "W"
+    icon: "mdi:lightning-bolt"
+    accuracy_decimals: 0
+    lambda: |-
+      return id(current_power);
+    update_interval: 5s
         
 time:
   - platform: homeassistant
