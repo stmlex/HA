@@ -1,0 +1,157 @@
+# InfluxDB configuration
+influxdb:
+  api_version: 2
+  ssl: false
+  host: !secret INFLUXDB_HOST
+  port: !secret INFLUXDB_PORT
+  token: !secret INFLUXDB_TOKEN
+  organization: !secret INFLUX_ORG_ID
+  bucket: !secret INFLUXDB_USER
+  tags_attributes:
+    - friendly_name
+  include:
+    domains:
+      - sun
+      - weather
+    entities:
+      - sensor.energy_meter_power
+      - sensor.energy_meter_total_t1
+      - sensor.energy_meter_total_t2
+      - sensor.water_bathroom_total_hot_water_consumption_cost
+      - sensor.water_bathroom_total_cold_water_consumption_cost
+      - sensor.water_toilet_total_hot_water_consumption_cost
+      - sensor.water_toilet_total_cold_water_consumption_cost
+      - sensor.energy_meter_total_t1_cost
+      - sensor.energy_meter_total_t2_cost
+      - sensor.water_toilet_hot_water_temperature
+      - sensor.water_toilet_cold_water_temperature
+      - sensor.water_toilet_total_hot_water_consumption
+      - sensor.water_toilet_total_cold_water_consumption
+      - sensor.toilet_humidity
+      - sensor.toilet_temperature
+      - sensor.water_bathroom_hot_water_temperature
+      - sensor.water_bathroom_cold_water_temperature
+      - sensor.water_bathroom_total_hot_water_consumption
+      - sensor.water_bathroom_total_cold_water_consumption
+      - sensor.bathroom_humidity
+      - sensor.bathroom_temperature
+      - sensor.livingroom_humidity
+      - sensor.livingroom_temperature
+      - sensor.livingroom_co2
+      - sensor.livingroom_2_5um
+      - sensor.childrenroom_humidity
+      - sensor.childrenroom_temperature
+      - sensor.childrenroom_co2
+      - sensor.childrenroom_2_5um
+      - sensor.bedroom_humidity
+      - sensor.bedroom_temperature
+      - sensor.bedroom_co2
+      - sensor.bedroom_2_5um
+      - sensor.balcony_humidity
+      - sensor.balcony_temperature
+      - sensor.kitchen_humidity
+      - sensor.kitchen_temperature
+
+sensor:
+  - platform: template
+    sensors:
+      toilet_humidity:
+        value_template: "{{ states('sensor.a4c138f88e72_humidity') }}"
+        unit_of_measurement: "%"
+      toilet_temperature:
+        value_template: "{{ states('sensor.a4c138f88e72_temperature') }}"
+        unit_of_measurement: "°C"
+
+      bathroom_humidity:
+        value_template: "{{ states('sensor.a4c1386327f1_humidity') }}"
+        unit_of_measurement: "%"
+      bathroom_temperature:
+        value_template: "{{ states('sensor.a4c1386327f1_temperature') }}"
+        unit_of_measurement: "°C"
+
+      kitchen_humidity:
+        value_template: "{{ states('sensor.a4c138aed13a_humidity') }}"
+        unit_of_measurement: "%"
+      kitchen_temperature:
+        value_template: "{{ states('sensor.a4c138aed13a_temperature') }}"
+        unit_of_measurement: "°C"
+
+      balcony_humidity:
+        value_template: "{{ states('sensor.a4c138b90c73_humidity') }}"
+        unit_of_measurement: "%"
+      balcony_temperature:
+        value_template: "{{ states('sensor.a4c138b90c73_temperature') }}"
+        unit_of_measurement: "°C"
+
+      bedroom_humidity:
+        value_template: "{{ states('sensor.a4c138041e22_humidity') }}"
+        unit_of_measurement: "%"
+      bedroom_temperature:
+        value_template: "{{ states('sensor.a4c138041e22_temperature') }}"
+        unit_of_measurement: "°C"
+      bedroom_co2:
+        value_template: "{{ states('sensor.mh_z19_co2_value') }}"
+        unit_of_measurement: "ppm"
+      bedroom_2_5um:
+        value_template: "{{ states('sensor.concentration2_2_5mm') }}"
+        unit_of_measurement: "µg/m³"
+
+      livingroom_humidity:
+        value_template: "{{ states('sensor.a4c1381840a0_humidity') }}"
+        unit_of_measurement: "%"
+      livingroom_temperature:
+        value_template: "{{ states('sensor.a4c1381840a0_temperature') }}"
+        unit_of_measurement: "°C"
+      livingroom_co2:
+        value_template: "{{ states('sensor.mh_z19_co2_value_2') }}"
+        unit_of_measurement: "ppm"
+      livingroom_2_5um:
+        value_template: "{{ states('sensor.concentration2_2_5mm_2') }}"
+        unit_of_measurement: "µg/m³"
+
+      childrenroom_humidity:
+        value_template: "{{ states('sensor.a4c138a0dbd3_humidity') }}"
+        unit_of_measurement: "%"
+      childrenroom_temperature:
+        value_template: "{{ states('sensor.a4c138a0dbd3_temperature') }}"
+        unit_of_measurement: "°C"
+      childrenroom_co2:
+        value_template: "{{ states('sensor.co2') }}"
+        unit_of_measurement: "ppm"
+      childrenroom_2_5um:
+        value_template: "{{ states('sensor.pm1006k_2_5mm_m3') }}"
+        unit_of_measurement: "µg/m³"
+
+input_number:
+  energy_t1_tariff:
+    name: energy_t1_tariff
+    unit_of_measurement: "RUB/kWh"
+    mode: box
+    min: 0
+    max: 1000000
+    step: 0.01
+    icon: mdi:currency-rub
+  energy_t2_tariff:
+    name: energy_t2_tariff
+    unit_of_measurement: "RUB/kWh"
+    mode: box
+    min: 0
+    max: 1000000
+    step: 0.01
+    icon: mdi:currency-rub
+  hot_water_tariff:
+    name: hot_water_tariff
+    unit_of_measurement: "RUB/m³"
+    mode: box
+    min: 0
+    max: 1000000
+    step: 0.01
+    icon: mdi:currency-rub
+  cold_water_tariff:
+    name: hot_water_tariff
+    unit_of_measurement: "RUB/m³"
+    mode: box
+    min: 0
+    max: 1000000
+    step: 0.01
+    icon: mdi:currency-rub
