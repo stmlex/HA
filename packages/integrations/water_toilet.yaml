@@ -6,7 +6,7 @@ input_number:
     min: 0
     max: 1000000
     step: 0.001
-    icon: mdi:water
+    icon: mdi:water-plus
   toilet_set_cold_water:
     name: toilet_set_cold_water
     unit_of_measurement: "m³"
@@ -14,14 +14,44 @@ input_number:
     min: 0
     max: 1000000
     step: 0.001
-    icon: mdi:water
+    icon: mdi:water-minus
+
+input_button:
+  sync_toilet_totals:
+    name: sync_toilet_totals
+    icon: mdi:water-sync
 
 input_text:
   toilet_hot_water_state:
     name: toilet_hot_water_state
-    initial: "unnown"
+    initial: "unknown"
 
 automation:
+  - id: "sync_toilet_totals"
+    alias: sync_toilet_totals
+    description: ""
+    mode: single
+    variables:
+      hot_water_total: "{{ states('input_number.toilet_set_hot_water') | float }}"
+      cold_water_total: "{{ states('input_number.toilet_set_cold_water') | float }}"
+    triggers:
+      - trigger: state
+        entity_id:
+          - input_button.sync_toilet_totals
+    action:
+      - action: esphome.water_toilet_set_total_hot_water_consumption
+        data:
+          value: "{{ hot_water_total }}"
+      - action: esphome.water_toilet_set_total_cold_water_consumption
+        data:
+          value: "{{ cold_water_total }}"
+      - action: telegram_bot.send_message
+        data:
+          message: >
+            Синхронизация счетчиков воды в туалете:
+            горячая: {{ hot_water_total }}m³
+            холодная: {{ cold_water_total }}m³
+
   - id: toilet_hot_water_state_message
     alias: toilet_hot_water_state_message
     description: ""
@@ -70,41 +100,3 @@ automation:
                 data:
                   message: >
                     Температура воды в туалете меньше {{ lower_treshold }}°C
-
-  - id: "toilet_set_hot_water"
-    alias: toilet_set_hot_water
-    description: ""
-    mode: single
-    variables:
-      new_consumption: "{{ states('input_number.toilet_set_hot_water') | float }}"
-    triggers:
-      - trigger: state
-        entity_id:
-          - input_number.toilet_set_hot_water
-    action:
-      - action: esphome.water_toilet_set_total_hot_water_consumption
-        data:
-          value: "{{ new_consumption }}"
-      - action: telegram_bot.send_message
-        data:
-          message: >
-            Установлены показания счетчика горячей воды в туалете: {{ new_consumption }}m³
-
-  - id: "toilet_set_cold_water"
-    alias: toilet_set_cold_water
-    description: ""
-    mode: single
-    variables:
-      new_consumption: "{{ states('input_number.toilet_set_cold_water') | float }}"
-    triggers:
-      - trigger: state
-        entity_id:
-          - input_number.toilet_set_cold_water
-    action:
-      - action: esphome.water_toilet_set_total_cold_water_consumption
-        data:
-          value: "{{ new_consumption }}"
-      - action: telegram_bot.send_message
-        data:
-          message: >
-            Установлены показания счетчика холодной воды в туалете: {{ new_consumption }}m³

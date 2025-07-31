@@ -18,40 +18,33 @@ input_number:
     step: 1
     icon: mdi:lightning-bolt
 
+input_button:
+  sync_energy_totals:
+    name: sync_energy_totals
+    icon: mdi:sync
+
 automation:
   - id: "energy_set_total_t1"
     alias: energy_set_total_t1
     description: ""
     mode: single
     variables:
-      new_total: "{{ states('input_number.energy_set_total_t1') | float }}"
+      new_total_t1: "{{ states('input_number.energy_set_total_t1') | float }}"
+      new_total_t2: "{{ states('input_number.energy_set_total_t2') | float }}"
     triggers:
       - trigger: state
         entity_id:
-          - input_number.energy_set_total_t1
+          - input_button.sync_energy_totals
     action:
       - action: esphome.energy_meter_set_total_t1
         data:
-          value: "{{ new_total }}"
-      - action: telegram_bot.send_message
-        data:
-          message: >
-            Установлены показания счетчика энергии Т1: {{ new_total }}kWh
-  - id: "energy_set_total_t2"
-    alias: energy_set_total_t2
-    description: ""
-    mode: single
-    variables:
-      new_total: "{{ states('input_number.energy_set_total_t2') | float }}"
-    triggers:
-      - trigger: state
-        entity_id:
-          - input_number.energy_set_total_t2
-    action:
+          value: "{{ new_total_t1 }}"
       - action: esphome.energy_meter_set_total_t2
         data:
-          value: "{{ new_total }}"
+          value: "{{ new_total_t2 }}"
       - action: telegram_bot.send_message
         data:
           message: >
-            Установлены показания счетчика энергии Т2: {{ new_total }}kWh
+            Синхронизация счетчика энергии:
+            Т1: {{ new_total_t1 }}kWh
+            Т2: {{ new_total_t2 }}kWh
