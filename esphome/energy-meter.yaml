@@ -185,7 +185,7 @@ sensor:
   
   - platform: template
     name: "power"
-    device_class: energy
+    device_class: power
     state_class: measurement
     unit_of_measurement: "W"
     icon: "mdi:lightning-bolt"
