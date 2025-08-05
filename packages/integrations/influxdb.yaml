@@ -29,14 +29,24 @@ influxdb:
       - sensor.water_total_cost_daily
       - sensor.total_cost_daily
 
+      - sensor.energy_t1_cost_monthly
+      - sensor.energy_t2_cost_monthly
+      - sensor.energy_total_cost_monthly
+      - sensor.toilet_hot_water_cost_monthly
+      - sensor.toilet_cold_water_cost_monthly
+      - sensor.bathroom_hot_water_cost_monthly
+      - sensor.bathroom_cold_water_cost_monthly
+      - sensor.hot_water_total_cost_monthly
+      - sensor.cold_water_total_cost_monthly
+      - sensor.water_total_cost_monthly
+      - sensor.total_cost_monthly
+
       - sensor.water_toilet_hot_water_temperature
       - sensor.water_toilet_cold_water_temperature
       - sensor.water_toilet_total_hot_water_consumption
       - sensor.water_toilet_total_cold_water_consumption
       - sensor.toilet_humidity
       - sensor.toilet_temperature
-      - sensor.toilet_hot_water_cost_daily
-      - sensor.toilet_cold_water_cost_daily
 
       - sensor.water_bathroom_hot_water_temperature
       - sensor.water_bathroom_cold_water_temperature
@@ -44,8 +54,6 @@ influxdb:
       - sensor.water_bathroom_total_cold_water_consumption
       - sensor.bathroom_humidity
       - sensor.bathroom_temperature
-      - sensor.bathroom_hot_water_cost_daily
-      - sensor.bathroom_cold_water_cost_daily
 
       - sensor.livingroom_humidity
       - sensor.livingroom_temperature

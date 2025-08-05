@@ -135,7 +135,7 @@ template:
         state: >
           {% set energy_t1 = states('sensor.energy_t1_cost_daily') | float %}
           {% set energy_t2 = states('sensor.energy_t2_cost_daily') | float %}
-          {{ (energy_t1 + energy_t2) | round(2) }}
+          {{ (energy_t1 + energy_t2) }}
       - name: "toilet_hot_water_cost_daily"
         unit_of_measurement: "₽"
         state: >
@@ -153,7 +153,7 @@ template:
         state: >
           {% set water = states('sensor.toilet_cold_water_daily') | float %}
           {% set tariff = states('sensor.cold_water_tariff') | float %}
-          {{ (water) | round(2) }}
+          {{ (water * tariff) | round(2) }}
       - name: "bathroom_cold_water_cost_daily"
         unit_of_measurement: "₽"
         state: >
@@ -185,69 +185,69 @@ template:
           {% set energy_cost = states('sensor.energy_total_cost_daily') | float %}
           {{ (water_cost + energy_cost) }}
 
-      # - name: "energy_t1_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set energy = states('sensor.energy_t1_monthly') | float %}
-      #     {% set tariff = states('input_number.energy_t1_tariff') | float %}
-      #     {{ (energy*tariff) | round(2) }}
-      # - name: "energy_t2_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set energy = states('sensor.energy_t2_monthly') | float %}
-      #     {% set tariff = states('input_number.energy_t2_tariff') | float %}
-      #     {{ (energy*tariff) | round(2) }}
-      # - name: "energy_total_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set energy_t1 = states('sensor.energy_t1_monthly') | float %}
-      #     {% set energy_t2 = states('sensor.energy_t2_monthly') | float %}
-      #     {{ (energy_t1 + energy_t2) | round(2) }}
-      # - name: "toilet_hot_water_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set water = states('sensor.toilet_hot_water_monthly') | float %}
-      #     {% set tariff = states('sensor.hot_water_tariff') | float %}
-      #     {{ (water * tariff) | round(2)}}
-      # - name: "bathroom_hot_water_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set water = states('sensor.bathroom_hot_water_monthly') | float %}
-      #     {% set tariff = states('sensor.hot_water_tariff') | float %}
-      #     {{ (water * tariff) | round(2)}}
-      # - name: "toilet_cold_water_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set water = states('sensor.toilet_cold_water_monthly') | float %}
-      #     {% set tariff = states('sensor.cold_water_tariff') | float %}
-      #     {{ (water) | round(2) }}
-      # - name: "bathroom_cold_water_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set water = states('sensor.bathroom_cold_water_monthly') | float %}
-      #     {% set tariff = states('sensor.cold_water_tariff') | float %}
-      #     {{ (water * tariff) | round(2) }}
-      # - name: "cold_water_total_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set water1 = states('sensor.toilet_cold_water_cost_monthly') | float %}
-      #     {% set water2 = states('sensor.bathroom_cold_water_monthly') | float %}
-      #     {{ (water1 + water2) }}
-      # - name: "hot_water_total_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set water1 = states('sensor.toilet_hot_water_cost_monthly') | float %}
-      #     {% set water2 = states('sensor.bathroom_hot_water_monthly') | float %}
-      #     {{ (water1 + water2) }}
-      # - name: "water_total_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set water1 = states('sensor.cold_water_total_cost_monthly') | float %}
-      #     {% set water2 = states('sensor.hot_water_total_cost_monthly') | float %}
-      #     {{ (water1 + water2) }}
-      # - name: "total_cost_monthly"
-      #   unit_of_measurement: "₽"
-      #   state: >
-      #     {% set water_cost = states('sensor.water_total_cost_monthly') | float %}
-      #     {% set energy_cost = states('sensor.energy_total_cost_monthly') | float %}
-      #     {{ (water_cost + energy_cost) }}
+      - name: "energy_t1_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set energy = states('sensor.energy_t1_monthly') | float %}
+          {% set tariff = states('input_number.energy_t1_tariff') | float %}
+          {{ (energy*tariff) | round(2) }}
+      - name: "energy_t2_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set energy = states('sensor.energy_t2_monthly') | float %}
+          {% set tariff = states('input_number.energy_t2_tariff') | float %}
+          {{ (energy*tariff) | round(2) }}
+      - name: "energy_total_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set energy_t1 = states('sensor.energy_t1_cost_monthly') | float %}
+          {% set energy_t2 = states('sensor.energy_t2_cost_monthly') | float %}
+          {{ (energy_t1 + energy_t2) | round(2) }}
+      - name: "toilet_hot_water_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set water = states('sensor.toilet_hot_water_monthly') | float %}
+          {% set tariff = states('sensor.hot_water_tariff') | float %}
+          {{ (water * tariff) | round(2)}}
+      - name: "bathroom_hot_water_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set water = states('sensor.bathroom_hot_water_monthly') | float %}
+          {% set tariff = states('sensor.hot_water_tariff') | float %}
+          {{ (water * tariff) | round(2)}}
+      - name: "toilet_cold_water_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set water = states('sensor.toilet_cold_water_monthly') | float %}
+          {% set tariff = states('sensor.cold_water_tariff') | float %}
+          {{ (water * tariff) | round(2) }}
+      - name: "bathroom_cold_water_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set water = states('sensor.bathroom_cold_water_monthly') | float %}
+          {% set tariff = states('sensor.cold_water_tariff') | float %}
+          {{ (water * tariff) | round(2) }}
+      - name: "cold_water_total_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set water1 = states('sensor.toilet_cold_water_cost_monthly') | float %}
+          {% set water2 = states('sensor.bathroom_cold_water_monthly') | float %}
+          {{ (water1 + water2) }}
+      - name: "hot_water_total_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set water1 = states('sensor.toilet_hot_water_cost_monthly') | float %}
+          {% set water2 = states('sensor.bathroom_hot_water_monthly') | float %}
+          {{ (water1 + water2) }}
+      - name: "water_total_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set water1 = states('sensor.cold_water_total_cost_monthly') | float %}
+          {% set water2 = states('sensor.hot_water_total_cost_monthly') | float %}
+          {{ (water1 + water2) }}
+      - name: "total_cost_monthly"
+        unit_of_measurement: "₽"
+        state: >
+          {% set water_cost = states('sensor.water_total_cost_monthly') | float %}
+          {% set energy_cost = states('sensor.energy_total_cost_monthly') | float %}
+          {{ (water_cost + energy_cost) }}
