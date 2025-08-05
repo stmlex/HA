@@ -164,13 +164,13 @@ template:
         unit_of_measurement: "₽"
         state: >
           {% set water1 = states('sensor.toilet_cold_water_cost_daily') | float %}
-          {% set water2 = states('sensor.bathroom_cold_water_daily') | float %}
+          {% set water2 = states('sensor.bathroom_cold_water_cost_daily') | float %}
           {{ (water1 + water2) }}
       - name: "hot_water_total_cost_daily"
         unit_of_measurement: "₽"
         state: >
           {% set water1 = states('sensor.toilet_hot_water_cost_daily') | float %}
-          {% set water2 = states('sensor.bathroom_hot_water_daily') | float %}
+          {% set water2 = states('sensor.bathroom_hot_water_cost_daily') | float %}
           {{ (water1 + water2) }}
       - name: "water_total_cost_daily"
         unit_of_measurement: "₽"
@@ -231,13 +231,13 @@ template:
         unit_of_measurement: "₽"
         state: >
           {% set water1 = states('sensor.toilet_cold_water_cost_monthly') | float %}
-          {% set water2 = states('sensor.bathroom_cold_water_monthly') | float %}
+          {% set water2 = states('sensor.bathroom_cold_water_cost_monthly') | float %}
           {{ (water1 + water2) }}
       - name: "hot_water_total_cost_monthly"
         unit_of_measurement: "₽"
         state: >
           {% set water1 = states('sensor.toilet_hot_water_cost_monthly') | float %}
-          {% set water2 = states('sensor.bathroom_hot_water_monthly') | float %}
+          {% set water2 = states('sensor.bathroom_hot_water_cost_monthly') | float %}
           {{ (water1 + water2) }}
       - name: "water_total_cost_monthly"
         unit_of_measurement: "₽"
