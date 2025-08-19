@@ -43,15 +43,15 @@ influxdb:
 
       - sensor.water_toilet_hot_water_temperature
       - sensor.water_toilet_cold_water_temperature
-      - sensor.water_toilet_total_hot_water_consumption
-      - sensor.water_toilet_total_cold_water_consumption
+      - sensor.water_toilet_hot_water_total
+      - sensor.water_toilet_cold_water_total
       - sensor.toilet_humidity
       - sensor.toilet_temperature
 
       - sensor.water_bathroom_hot_water_temperature
       - sensor.water_bathroom_cold_water_temperature
-      - sensor.water_bathroom_total_hot_water_consumption
-      - sensor.water_bathroom_total_cold_water_consumption
+      - sensor.water_bathroom_hot_water_total
+      - sensor.water_bathroom_cold_water_total
       - sensor.bathroom_humidity
       - sensor.bathroom_temperature
 

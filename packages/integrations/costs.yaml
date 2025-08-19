@@ -52,22 +52,22 @@ utility_meter:
     always_available: true
     cycle: daily
   toilet_hot_water_daily:
-    source: sensor.water_toilet_total_hot_water_consumption
+    source: sensor.water_toilet_hot_water_total
     name: toilet_hot_water_daily
     always_available: true
     cycle: daily
   toilet_cold_water_daily:
-    source: sensor.water_toilet_total_cold_water_consumption
+    source: sensor.water_toilet_cold_water_total
     name: toilet_cold_water_daily
     always_available: true
     cycle: daily
   bathroom_hot_water_daily:
-    source: sensor.water_bathroom_total_hot_water_consumption
+    source: sensor.water_bathroom_hot_water_total
     name: bathroom_hot_water_daily
     always_available: true
     cycle: daily
   bathroom_cold_water_daily:
-    source: sensor.water_bathroom_total_cold_water_consumption
+    source: sensor.water_bathroom_cold_water_total
     name: bathroom_cold_water_daily
     always_available: true
     cycle: daily
@@ -83,22 +83,22 @@ utility_meter:
     always_available: true
     cycle: monthly
   toilet_hot_water_monthly:
-    source: sensor.water_toilet_total_hot_water_consumption
+    source: sensor.water_toilet_hot_water_total
     name: toilet_hot_water_monthly
     always_available: true
     cycle: monthly
   toilet_cold_water_monthly:
-    source: sensor.water_toilet_total_cold_water_consumption
+    source: sensor.water_toilet_cold_water_total
     name: toilet_cold_water_monthly
     always_available: true
     cycle: monthly
   bathroom_hot_water_monthly:
-    source: sensor.water_bathroom_total_hot_water_consumption
+    source: sensor.water_bathroom_hot_water_total
     name: bathroom_hot_water_monthly
     always_available: true
     cycle: monthly
   bathroom_cold_water_monthly:
-    source: sensor.water_bathroom_total_cold_water_consumption
+    source: sensor.water_bathroom_cold_water_total
     name: bathroom_cold_water_monthly
     always_available: true
     cycle: monthly
