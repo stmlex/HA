@@ -1,0 +1,45 @@
+input_button:
+  send_totals:
+    name: send_totals
+    icon: mdi:counter
+
+automation:
+  - id: "send_meters_totals"
+    alias: send_meters_totals
+    description: ""
+    mode: single
+    variables:
+      toilet_hot_total: "{{ states('sensor.water_toilet_hot_water_total') | float | round(0)}}"
+      toilet_cold_total: "{{ states('sensor.water_toilet_cold_water_total') | float | round(0) }}"
+      toilet_hot_sn: "{{ states('sensor.water_toilet_hot_water_sn') | string }}"
+      toilet_cold_sn: "{{ states('sensor.water_toilet_cold_water_sn') | string }}"
+
+      bathroom_hot_total: "{{ states('sensor.water_bathroom_hot_water_total') | float | round(0) }}"
+      bathroom_cold_total: "{{ states('sensor.water_bathroom_cold_water_total') | float | round(0) }}"
+      bathroom_hot_sn: "{{ states('sensor.water_bathroom_hot_water_sn') | string }}"
+      bathroom_cold_sn: "{{ states('sensor.water_bathroom_cold_water_sn') | string }}"
+
+      energy_t1_total: "{{ states('sensor.energy_meter_total_t1') | float | round(0) }}"
+      energy_t2_total: "{{ states('sensor.energy_meter_total_t2') | float | round(0) }}"
+    triggers:
+      - trigger: state
+        entity_id:
+          - input_button.send_totals
+      - platform: time
+        at: "20:00"
+        days:
+          - 19
+    action:
+      - action: telegram_bot.send_message
+        data:
+          message: >
+            Показания счетчиков:
+              Холодная вода:
+                {{bathroom_cold_sn}}: {{bathroom_cold_total}} m³
+                {{toilet_cold_sn}}: {{toilet_cold_total}} m³
+              Горячая вода:
+                {{bathroom_hot_sn}}: {{bathroom_hot_total}} m³
+                {{toilet_hot_sn}}: {{toilet_hot_total}} m³
+              Электроэнергия:
+                T1: {{energy_t1_total}} кВт*ч
+                T2: {{energy_t2_total}} кВт*ч
