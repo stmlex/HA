@@ -25,10 +25,8 @@ automation:
       - trigger: state
         entity_id:
           - input_button.send_totals
-      - platform: time
-        at: "20:00"
-        days:
-          - 19
+      - trigger: template
+        value_template: "{{ (now().day == 18) and (now().hour == 20) }}"
     action:
       - action: telegram_bot.send_message
         data:
