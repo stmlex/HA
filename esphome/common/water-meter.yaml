@@ -1,0 +1,207 @@
+esp32:
+  board: lolin_s2_pico
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+  logs:
+    light: NONE 
+    binary_sensor: NONE
+
+# Enable Home Assistant API
+api:
+  actions:
+    - variables:
+        value: float
+      then:
+        - lambda: |-
+            id(hot_water_total) = value;
+            ESP_LOGD("custom", "set_hot_water_total to: %f", value);
+      action: set_hot_water_total
+
+    - variables:
+        value: float
+      then:
+        - lambda: |-
+            id(cold_water_total) = value;
+            ESP_LOGD("custom", "set_cold_water_total to: %f", value);
+      action: set_cold_water_total
+
+    - variables:
+        value: float
+      then:
+        - lambda: |-
+            id(hot_water_ratio) = value;
+            ESP_LOGD("custom", "set_hot_water_ratio to: %f", value);
+      action: set_hot_water_ratio
+    
+    - variables:
+        value: float
+      then:
+        - lambda: |-
+            id(cold_water_ratio) = value;
+            ESP_LOGD("custom", "set_cold_water_ratio to: %f", value);
+      action: set_cold_water_ratio
+    
+    # - variables:
+    #     value: string
+    #   then:
+    #     - lambda: |-
+    #         id(cold_water_sn) = value;
+    #         ESP_LOGD("custom", "set_cold_water_meter_sn to: %f", value);
+    #   action: set_cold_water_meter_sn
+    
+    # - variables:
+    #     value: string
+    #   then:
+    #     - lambda: |-
+    #         id(hot_water_sn) = value;
+    #         ESP_LOGD("custom", "set_hot_water_meter_sn to: %f", value);
+    #   action: set_hot_water_meter_sn
+
+output:
+  - platform: slow_pwm
+    pin: GPIO16
+    id: blue_led
+    period: 2s
+    max_power: 0.05
+  - platform: gpio
+    pin: GPIO39
+    id: red_led
+  - platform: gpio
+    pin: GPIO40
+    id: green_led
+
+light:
+  - platform: binary
+    name: "status_led"
+    output: blue_led
+    id: status_led
+    restore_mode: ALWAYS_ON
+  - platform: binary
+    id: hot_water_led
+    internal: true
+    output: red_led
+  - platform: binary
+    id: cold_water_led
+    internal: true
+    output: green_led
+
+globals:
+  - id: hot_water_total
+    type: double
+    restore_value: true
+    initial_value: ${hot_water_total_initial}
+
+  - id: cold_water_total
+    type: double
+    restore_value: true
+    initial_value: ${cold_water_total_initial}
+
+  - id: hot_water_ratio
+    type: double
+    restore_value: true
+    initial_value: ${hot_water_ratio_initial}
+
+  - id: cold_water_ratio
+    type: double
+    restore_value: true
+    initial_value: ${cold_water_ratio_initial}
+
+  - id: cold_water_sn
+    type: std::string
+    restore_value: true
+    initial_value: '"${cold_water_sn}"'
+
+  - id: hot_water_sn
+    type: std::string
+    restore_value: true
+    initial_value: '"${hot_water_sn}"'
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO2
+    name: "hot_water_meter"
+    id: hot_water_meter
+    internal: true
+    on_press:
+      then:
+        - light.turn_on:
+            id: hot_water_led
+        - delay: 0.2s
+        - light.turn_off:
+            id: hot_water_led
+        - lambda: |-
+            id(hot_water_total) += id(hot_water_ratio);
+    filters:
+      - invert:
+      - delayed_on: 500ms
+  - platform: gpio
+    pin: GPIO3
+    name: "cold_water_meter"
+    id: cold_water_meter
+    internal: true
+    on_press:
+      then:
+        - light.turn_on:
+            id: cold_water_led
+        - delay: 0.2s
+        - light.turn_off:
+            id: cold_water_led
+        - lambda: |-
+            id(cold_water_total) += id(cold_water_ratio);
+    filters:
+      - invert:
+      - delayed_on: 500ms
+
+one_wire:
+  - platform: gpio
+    pin: GPIO4
+    id: one_wire_1
+  - platform: gpio
+    pin: GPIO5
+    id: one_wire_2
+
+sensor:
+  - platform: internal_temperature
+    name: "CPU Temperature"
+    update_interval: 60s
+  - platform: dallas_temp
+    name: hot_water_temperature
+    one_wire_id: one_wire_1
+    update_interval: 60s
+  - platform: dallas_temp
+    name: cold_water_temperature
+    one_wire_id: one_wire_2
+    update_interval: 60s
+
+  - platform: template
+    name: "hot_water_total"
+    device_class: water
+    state_class: total_increasing
+    unit_of_measurement: "m³"
+    icon: "mdi:counter"
+    accuracy_decimals: 3
+    lambda: |-
+      return id(hot_water_total);
+  - platform: template
+    name: "cold_water_total"
+    device_class: water
+    state_class: total_increasing
+    unit_of_measurement: "m³"
+    icon: "mdi:counter"
+    accuracy_decimals: 3
+    lambda: |-
+      return id(cold_water_total);
+  # Example configuration entry
+text_sensor:
+  - platform: template
+    name: "hot_water_sn"
+    lambda: |-
+      return id(hot_water_sn);
+  - platform: template
+    name: "cold_water_sn"
+    lambda: |-
+      return id(cold_water_sn);
+    

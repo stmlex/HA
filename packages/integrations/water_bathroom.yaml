@@ -39,10 +39,10 @@ automation:
         entity_id:
           - input_button.sync_bathroom_totals
     action:
-      - action: esphome.water_bathroom_set_total_hot_water_consumption
+      - action: esphome.water_bathroom_set_hot_water_total
         data:
           value: "{{ hot_water_total }}"
-      - action: esphome.water_bathroom_set_total_cold_water_consumption
+      - action: esphome.water_bathroom_set_cold_water_total
         data:
           value: "{{ cold_water_total }}"
       - action: telegram_bot.send_message
