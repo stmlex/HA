@@ -75,6 +75,13 @@ influxdb:
       - sensor.kitchen_humidity
       - sensor.kitchen_temperature
 
+        #NAS synology
+      - sensor.nas_memory_usage_real
+      - sensor.nas_cpu_utilization_total
+      - sensor.nas_volume_1_volume_used
+      - sensor.nas_volume_2_volume_used
+      - sensor.nas_temperature
+
 sensor:
   - platform: template
     sensors:
@@ -116,7 +123,8 @@ sensor:
         value_template: "{{ states('sensor.mh_z19_co2_value') }}"
         unit_of_measurement: "ppm"
       bedroom_2_5um:
-        value_template: "{{ states('sensor.concentration2_2_5mm') }}"
+        value_template: "{{ states('sensor.plantower_particulate_matter_2_5mm_concentration') }}"
+        # value_template: "{{ states('sensor.concentration2_2_5mm') }}"
         unit_of_measurement: "µg/m³"
 
       livingroom_humidity:
