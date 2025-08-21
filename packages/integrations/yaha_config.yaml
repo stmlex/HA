@@ -1,22 +1,21 @@
 yandex_smart_home:
   filter:
     include_entity_globs:
-      - sensor.a4c1381840a0_temperature # livingroom
-      - sensor.a4c138041e22_temperature # bedroom
-      - sensor.a4c138a0dbd3_temperature # childrenroom
-      - sensor.a4c138aed13a_temperature # kitchen
-      - sensor.a4c138b90c73_temperature # balcony
-      - sensor.a4c1386327f1_temperature # bathroom
-      - sensor.a4c138f88e72_temperature # toilet
+      - sensor.livingroom_th2_temperature
+      - sensor.bedroom_th2_temperature
+      - sensor.childrensroom_th2_temperature
+      - sensor.kitchen_th2_temperature
+      - sensor.balcony_th2_temperature
+      - sensor.bathroom_th2_temperature
+      - sensor.toilet_th2_temperature
       - switch.vannaia_switch
-      - sensor.water_bathroom_total_hot_water_consumption
-      - sensor.water_bathroom_total_cold_water_consumption
-      - sensor.water_toilet_total_hot_water_consumption
-      - sensor.water_toilet_total_cold_water_consumption
+      - sensor.water_bathroom_hot_water_total
+      - sensor.water_bathroom_cold_water_total
+      - sensor.water_toilet_hot_water_total
+      - sensor.water_toilet_cold_water_total
       - sensor.energy_meter_total_t1
       - sensor.energy_meter_total_t2
-      - sensor.energy_meter_power
-      - binary_sensor.0x00158d0002890189_contact
+      - binary_sensor.main_door
       - sensor.0x00158d000246651d_action
       - light.rgb_clock
       # - light.hallway_light
@@ -97,7 +96,7 @@ yandex_smart_home:
         - type: water_level
           entity: sensor.smartmi_evaporative_humidifier_water_level
     sensor.mh_z19_co2_value:
-      name: Качество воздуха спальня
+      name: Воздух
       room: Спальня
       properties:
         - type: co2_level
@@ -109,7 +108,7 @@ yandex_smart_home:
         - type: pm10_density
           entity: sensor.concentration3_10mm
     sensor.mh_z19_co2_value_2:
-      name: Качество воздуха гостиная
+      name: Воздух
       room: Гостиная
       properties:
         - type: co2_level
@@ -121,7 +120,7 @@ yandex_smart_home:
         - type: pm10_density
           entity: sensor.concentration3_10mm_2
     sensor.co2:
-      name: Качество воздуха детская
+      name: Воздух
       room: Детская
       properties:
         - type: co2_level
@@ -134,109 +133,113 @@ yandex_smart_home:
           entity: sensor.pm1006k_10_0mm_m3
         - type: humidity
           entity: sensor.humidity
-    sensor.a4c1381840a0_temperature:
-      name: Датчик гостиной
+    sensor.livingroom_th2_temperature:
+      name: Гостиная
       room: Гостиная
       properties:
         - type: temperature
-          entity: sensor.a4c1381840a0_temperature
+          entity: sensor.livingroom_th2_temperature
         - type: humidity
-          entity: sensor.a4c1381840a0_humidity
-        # - type: battery_level
-        #   entity: sensor.a4c1381840a0_battery
-    sensor.a4c138041e22_temperature:
-      name: Датчик спальни
+          entity: sensor.livingroom_th2_humidity
+        - type: battery_level
+          entity: sensor.livingroom_th2_battery
+    sensor.bedroom_th2_temperature:
+      name: Спальня
       room: Спальня
       properties:
         - type: temperature
-          entity: sensor.a4c138041e22_temperature
+          entity: sensor.bedroom_th2_temperature
         - type: humidity
-          entity: sensor.a4c138041e22_humidity
-    #     - type: battery_level
-    #       entity: sensor.a4c138041e22_battery
-    sensor.a4c138a0dbd3_temperature:
-      name: Датчик детской
+          entity: sensor.bedroom_th2_humidity
+        - type: battery_level
+          entity: sensor.bedroom_th2_battery
+    sensor.childrensroom_th2_temperature:
+      name: Детская
       room: Детская
       properties:
         - type: temperature
-          entity: sensor.a4c138a0dbd3_temperature
+          entity: sensor.childrensroom_th2_temperature
         - type: humidity
-          entity: sensor.a4c138a0dbd3_humidity
-    #     - type: battery_level
-    #       entity: sensor.a4c138a0dbd3_battery
-    sensor.a4c138aed13a_temperature:
-      name: Датчик кухни
+          entity: sensor.childrensroom_th2_humidity
+        - type: battery_level
+          entity: sensor.childrensroom_th2_battery
+    sensor.kitchen_th2_temperature:
+      name: Кухня
       room: Кухня
       properties:
         - type: temperature
-          entity: sensor.a4c138aed13a_temperature
+          entity: sensor.kitchen_th2_temperature
         - type: humidity
-          entity: sensor.a4c138aed13a_humidity
-    #     - type: battery_level
-    #       entity: sensor.a4c138aed13a_battery
-    sensor.a4c138b90c73_temperature:
-      name: Датчик балкона
+          entity: sensor.kitchen_th2_humidity
+        - type: battery_level
+          entity: sensor.kitchen_th2_battery
+    sensor.balcony_th2_temperature:
+      name: Балкон
       room: Балкон
       properties:
         - type: temperature
-          entity: sensor.a4c138b90c73_temperature
+          entity: sensor.balcony_th2_temperature
         - type: humidity
-          entity: sensor.a4c138b90c73_humidity
-    #     - type: battery_level
-    #       entity: sensor.a4c138b90c73_battery
-    sensor.a4c138f88e72_temperature:
-      name: Датчик в туалете
+          entity: sensor.balcony_th2_humidity
+        - type: battery_level
+          entity: sensor.balcony_th2_battery
+    sensor.toilet_th2_temperature:
+      name: Туалет
       room: Туалет
       properties:
         - type: temperature
-          entity: sensor.a4c138f88e72_temperature
+          entity: sensor.toilet_th2_temperature
         - type: humidity
-          entity: sensor.a4c138f88e72_humidity
-    sensor.a4c1386327f1_temperature:
-      name: Датчик ванной
+          entity: sensor.toilet_th2_humidity
+        - type: battery_level
+          entity: sensor.toilet_th2_humidity
+    sensor.bathroom_th2_temperature:
+      name: Ванная
       room: Ванная
       properties:
         - type: temperature
-          entity: sensor.a4c1386327f1_temperature
+          entity: sensor.bathroom_th2_temperature
         - type: humidity
-          entity: sensor.a4c1386327f1_humidity
+          entity: sensor.bathroom_th2_humidity
+        - type: battery_level
+          entity: sensor.bathroom_th2_humidity
     switch.vannaia_switch:
       name: Вода
       room: Ванная
-    sensor.water_bathroom_total_hot_water_consumption:
+    sensor.water_bathroom_hot_water_total:
       name: Счетчик горячей воды
       room: Ванная
       properties:
         - type: water_meter
           unit_of_measurement: m3
-          entity: sensor.water_bathroom_total_hot_water_consumption
+          entity: sensor.water_bathroom_hot_water_total
         - type: temperature
           entity: sensor.water_bathroom_hot_water_temperature
-    sensor.water_bathroom_total_cold_water_consumption:
+    sensor.water_bathroom_cold_water_total:
       name: Счетчик холодной воды
       room: Ванная
       properties:
         - type: water_meter
           unit_of_measurement: m3
-          entity: sensor.water_bathroom_total_cold_water_consumption
+          entity: sensor.water_bathroom_cold_water_total
         - type: temperature
           entity: sensor.water_bathroom_cold_water_temperature
-    sensor.water_toilet_total_hot_water_consumption:
+    sensor.water_toilet_hot_water_total:
       name: Счетчик горячей воды
       room: Туалет
       properties:
         - type: water_meter
           unit_of_measurement: m3
-          entity: sensor.water_toilet_total_hot_water_consumption
+          entity: sensor.water_toilet_hot_water_total
         - type: temperature
           entity: sensor.water_toilet_hot_water_temperature
-    sensor.water_toilet_total_cold_water_consumption:
+    sensor.water_toilet_cold_water_total:
       name: Счетчик холодной воды
       room: Туалет
       properties:
         - type: water_meter
           unit_of_measurement: m3
-          entity: sensor.water_toilet_total_cold_water_consumption
+          entity: sensor.water_toilet_cold_water_total
         - type: temperature
           entity: sensor.water_toilet_cold_water_temperature
     sensor.energy_meter_total_t1:
@@ -255,14 +258,14 @@ yandex_smart_home:
         - type: electricity_meter
           unit_of_measurement: kWh
           entity: sensor.energy_meter_total_t2
-    binary_sensor.0x00158d0002890189_contact:
-      name: Датчик входной двери
+    binary_sensor.main_door:
+      name: Входная дверь
       room: Прихожая
       properties:
         - type: open
-          entity: binary_sensor.0x00158d0002890189_contact
-    #     - type: battery_level
-    #       entity: sensor.0x00158d0002890189_battery
+          entity: binary_sensor.main_door
+        - type: battery_level
+          entity: sensor.main_door_battery
     # sensor.0x00158d000246651d_action:
     #   device_class: button
     #   name: Кнопка беспроводная

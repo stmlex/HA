@@ -41,114 +41,43 @@ influxdb:
       - sensor.water_total_cost_monthly
       - sensor.total_cost_monthly
 
+      - sensor.livingroom_th2_temperature
+      - sensor.bedroom_th2_temperature
+      - sensor.childrensroom_th2_temperature
+      - sensor.kitchen_th2_temperature
+      - sensor.balcony_th2_temperature
+      - sensor.bathroom_th2_temperature
+      - sensor.toilet_th2_temperature
+
+      - sensor.livingroom_th2_humidity
+      - sensor.bedroom_th2_humidity
+      - sensor.childrensroom_th2_humidity
+      - sensor.kitchen_th2_humidity
+      - sensor.balcony_th2_humidity
+      - sensor.bathroom_th2_humidity
+      - sensor.toilet_th2_humidity
+
+      - sensor.livingroom_th2_battery
+      - sensor.bedroom_th2_battery
+      - sensor.childrensroom_th2_battery
+      - sensor.kitchen_th2_battery
+      - sensor.balcony_th2_battery
+      - sensor.bathroom_th2_battery
+      - sensor.toilet_th2_battery
+      - sensor.main_door_battery
+      - sensor.button_battery
+
       - sensor.water_toilet_hot_water_temperature
       - sensor.water_toilet_cold_water_temperature
       - sensor.water_toilet_hot_water_total
       - sensor.water_toilet_cold_water_total
-      - sensor.toilet_humidity
-      - sensor.toilet_temperature
-
       - sensor.water_bathroom_hot_water_temperature
       - sensor.water_bathroom_cold_water_temperature
       - sensor.water_bathroom_hot_water_total
       - sensor.water_bathroom_cold_water_total
-      - sensor.bathroom_humidity
-      - sensor.bathroom_temperature
 
-      - sensor.livingroom_humidity
-      - sensor.livingroom_temperature
-      - sensor.livingroom_co2
-      - sensor.livingroom_2_5um
-
-      - sensor.childrenroom_humidity
-      - sensor.childrenroom_temperature
-      - sensor.childrenroom_co2
-      - sensor.childrenroom_2_5um
-
-      - sensor.bedroom_humidity
-      - sensor.bedroom_temperature
-      - sensor.bedroom_co2
-      - sensor.bedroom_2_5um
-
-      - sensor.balcony_humidity
-      - sensor.balcony_temperature
-      - sensor.kitchen_humidity
-      - sensor.kitchen_temperature
-
-        #NAS synology
       - sensor.nas_memory_usage_real
       - sensor.nas_cpu_utilization_total
       - sensor.nas_volume_1_volume_used
       - sensor.nas_volume_2_volume_used
       - sensor.nas_temperature
-
-sensor:
-  - platform: template
-    sensors:
-      toilet_humidity:
-        value_template: "{{ states('sensor.a4c138f88e72_humidity') }}"
-        unit_of_measurement: "%"
-      toilet_temperature:
-        value_template: "{{ states('sensor.a4c138f88e72_temperature') }}"
-        unit_of_measurement: "°C"
-
-      bathroom_humidity:
-        value_template: "{{ states('sensor.a4c1386327f1_humidity') }}"
-        unit_of_measurement: "%"
-      bathroom_temperature:
-        value_template: "{{ states('sensor.a4c1386327f1_temperature') }}"
-        unit_of_measurement: "°C"
-
-      kitchen_humidity:
-        value_template: "{{ states('sensor.a4c138aed13a_humidity') }}"
-        unit_of_measurement: "%"
-      kitchen_temperature:
-        value_template: "{{ states('sensor.a4c138aed13a_temperature') }}"
-        unit_of_measurement: "°C"
-
-      balcony_humidity:
-        value_template: "{{ states('sensor.a4c138b90c73_humidity') }}"
-        unit_of_measurement: "%"
-      balcony_temperature:
-        value_template: "{{ states('sensor.a4c138b90c73_temperature') }}"
-        unit_of_measurement: "°C"
-
-      bedroom_humidity:
-        value_template: "{{ states('sensor.a4c138041e22_humidity') }}"
-        unit_of_measurement: "%"
-      bedroom_temperature:
-        value_template: "{{ states('sensor.a4c138041e22_temperature') }}"
-        unit_of_measurement: "°C"
-      bedroom_co2:
-        value_template: "{{ states('sensor.mh_z19_co2_value') }}"
-        unit_of_measurement: "ppm"
-      bedroom_2_5um:
-        value_template: "{{ states('sensor.plantower_particulate_matter_2_5mm_concentration') }}"
-        # value_template: "{{ states('sensor.concentration2_2_5mm') }}"
-        unit_of_measurement: "µg/m³"
-
-      livingroom_humidity:
-        value_template: "{{ states('sensor.a4c1381840a0_humidity') }}"
-        unit_of_measurement: "%"
-      livingroom_temperature:
-        value_template: "{{ states('sensor.a4c1381840a0_temperature') }}"
-        unit_of_measurement: "°C"
-      livingroom_co2:
-        value_template: "{{ states('sensor.mh_z19_co2_value_2') }}"
-        unit_of_measurement: "ppm"
-      livingroom_2_5um:
-        value_template: "{{ states('sensor.concentration2_2_5mm_2') }}"
-        unit_of_measurement: "µg/m³"
-
-      childrenroom_humidity:
-        value_template: "{{ states('sensor.a4c138a0dbd3_humidity') }}"
-        unit_of_measurement: "%"
-      childrenroom_temperature:
-        value_template: "{{ states('sensor.a4c138a0dbd3_temperature') }}"
-        unit_of_measurement: "°C"
-      childrenroom_co2:
-        value_template: "{{ states('sensor.co2') }}"
-        unit_of_measurement: "ppm"
-      childrenroom_2_5um:
-        value_template: "{{ states('sensor.pm1006k_2_5mm_m3') }}"
-        unit_of_measurement: "µg/m³"
