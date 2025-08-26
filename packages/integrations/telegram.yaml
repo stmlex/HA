@@ -4,26 +4,80 @@ telegram_bot:
     allowed_chat_ids:
       - !secret TELEGRAM_CHAT_ID
 notify:
-  - name: telegram_main
+  - name: telegram
     platform: telegram
     chat_id: !secret TELEGRAM_CHAT_ID
-# Sending notifications using Telegram is straight forward.
-# Just place something like below in whatever automation
-# or script that you want to send a notification:
-#  - service: notify.telegram_main
-#    data:
-#      message: "URGENT: This is a telegram notification"
-# - id: "test_ping_pong_telegram"
+
 automation:
-  - id: "test_ping_pong_telegram"
-    alias: "Telegram bot that reply pong to ping"
+  - id: "telegram_bot_start"
+    alias: "telegram_bot_start"
     description: ""
     triggers:
       - trigger: event
         event_type: telegram_command
         event_data:
-          command: "/ping"
-    action:
-      - action: telegram_bot.send_message
+          command: "/start"
+    actions:
+      - action: notify.telegram
         data:
-          message: "pong!"
+          message: "Команды:"
+          data:
+            inline_keyboard:
+              - "Счетчики:/send_totals"
+
+  - id: "send_meters_totals"
+    alias: send_meters_totals
+    description: ""
+    mode: single
+    variables:
+      toilet_hot_total: "{{ states('sensor.water_toilet_hot_water_total') | float | round(0)}}"
+      toilet_cold_total: "{{ states('sensor.water_toilet_cold_water_total') | float | round(0) }}"
+      toilet_hot_sn: "{{ states('sensor.water_toilet_hot_water_sn') | string }}"
+      toilet_cold_sn: "{{ states('sensor.water_toilet_cold_water_sn') | string }}"
+
+      bathroom_hot_total: "{{ states('sensor.water_bathroom_hot_water_total') | float | round(0) }}"
+      bathroom_cold_total: "{{ states('sensor.water_bathroom_cold_water_total') | float | round(0) }}"
+      bathroom_hot_sn: "{{ states('sensor.water_bathroom_hot_water_sn') | string }}"
+      bathroom_cold_sn: "{{ states('sensor.water_bathroom_cold_water_sn') | string }}"
+
+      energy_t1_total: "{{ states('sensor.energy_meter_total_t1') | float | round(0) }}"
+      energy_t2_total: "{{ states('sensor.energy_meter_total_t2') | float | round(0) }}"
+    triggers:
+      - trigger: state
+        entity_id:
+          - input_button.send_totals
+      - trigger: event
+        event_type: telegram_callback
+        event_data:
+          command: "/send_totals"
+      - trigger: template
+        value_template: "{{ (now().day == 18) and (now().hour == 20) }}"
+    actions:
+      # - action: telegram_bot.answer_callback_query
+      - action: notify.telegram
+        data:
+          # callback_query_id: "{{ trigger.event.data.id }}"
+          title: "*Показания счетчиков*"
+          message: >
+            _Холодная вода:_
+              `{{bathroom_cold_sn}}`: {{bathroom_cold_total}} m³
+              `{{toilet_cold_sn}}`: {{toilet_cold_total}} m³
+            _Горячая вода:_
+              `{{bathroom_hot_sn}}`: {{bathroom_hot_total}} m³
+              `{{toilet_hot_sn}}`: {{toilet_hot_total}} m³
+            _Электроэнергия:_
+              `T1`: {{energy_t1_total}} кВт·ч
+              `T2`: {{energy_t2_total}} кВт·ч
+
+  - id: "Door_to_open"
+    alias: "Door is open"
+    description: ""
+    triggers:
+      - trigger: state
+        entity_id: binary_sensor.main_door
+        to: "on"
+    condition: []
+    action:
+      - action: notify.telegram
+        data:
+          message: "Дверь🚪"
