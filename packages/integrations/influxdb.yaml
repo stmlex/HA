@@ -14,6 +14,19 @@ influxdb:
       - sun
       - weather
     entities:
+      - sensor.energy_t1_daily
+      - sensor.energy_t2_daily
+      - sensor.toilet_hot_water_daily
+      - sensor.toilet_cold_water_daily
+      - sensor.bathroom_hot_water_daily
+      - sensor.bathroom_cold_water_daily
+      - sensor.energy_t1_monthly
+      - sensor.energy_t2_monthly
+      - sensor.toilet_hot_water_monthly
+      - sensor.toilet_cold_water_monthly
+      - sensor.bathroom_hot_water_monthly
+      - sensor.bathroom_cold_water_monthly
+
       - sensor.energy_meter_power
       - sensor.energy_meter_total_t1
       - sensor.energy_meter_total_t2
