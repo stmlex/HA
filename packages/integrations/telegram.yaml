@@ -23,7 +23,58 @@ automation:
           message: "Команды:"
           data:
             inline_keyboard:
-              - "Счетчики:/send_totals"
+              - "Показания:/send_totals"
+              - "Установка:/set_totals"
+
+  - id: "choose_meter"
+    alias: "choose_meter"
+    description: ""
+    variables:
+      toilet_hot_sn: "{{ states('sensor.water_toilet_hot_water_sn') | string }}"
+      toilet_cold_sn: "{{ states('sensor.water_toilet_cold_water_sn') | string }}"
+      bathroom_hot_sn: "{{ states('sensor.water_bathroom_hot_water_sn') | string }}"
+      bathroom_cold_sn: "{{ states('sensor.water_bathroom_cold_water_sn') | string }}"
+    triggers:
+      - trigger: event
+        event_type: telegram_callback
+        event_data:
+          command: "/set_totals"
+    actions:
+      - action: telegram_bot.delete_message
+        data:
+          chat_id: !secret TELEGRAM_CHAT_ID
+          message_id: last
+      - action: notify.telegram
+        data:
+          message: "Выберите счетчик:"
+          message_tag: "menu"
+          data:
+            inline_keyboard:
+              - "/{{ toilet_hot_sn }}, /{{ toilet_cold_sn }}"
+              - "/{{ bathroom_hot_sn }}, /{{ bathroom_cold_sn }}"
+              - "/T1, /T2"
+              - "Отменить:/cancel"
+  - id: "telegram_bot_cancel"
+    alias: "telegram_bot_cancel"
+    description: ""
+    triggers:
+      - trigger: event
+        event_type: telegram_callback
+        event_data:
+          command: "/cancel"
+    actions:
+      - action: telegram_bot.delete_message
+        data:
+          chat_id: !secret TELEGRAM_CHAT_ID
+          message_id: last
+      - action: notify.telegram
+        data:
+          message: "Команды:"
+          message_tag: "menu"
+          data:
+            inline_keyboard:
+              - "Показания:/send_totals"
+              - "Установка:/set_totals"
 
   - id: "send_meters_totals"
     alias: send_meters_totals
@@ -43,9 +94,6 @@ automation:
       energy_t1_total: "{{ states('sensor.energy_meter_total_t1') | float | round(0) }}"
       energy_t2_total: "{{ states('sensor.energy_meter_total_t2') | float | round(0) }}"
     triggers:
-      - trigger: state
-        entity_id:
-          - input_button.send_totals
       - trigger: event
         event_type: telegram_callback
         event_data:
