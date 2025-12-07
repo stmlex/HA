@@ -1,4 +1,0 @@
-input_button:
-  send_totals:
-    name: send_totals
-    icon: mdi:counter
