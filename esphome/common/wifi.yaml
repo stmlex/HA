@@ -1,0 +1,7 @@
+wifi:
+  ssid: ${wifi_ssid}
+  password: ${wifi_password}
+  output_power: 18.0dB
+  ap:
+    ssid: ${node_name}
+    password: ${ap_password}

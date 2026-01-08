@@ -3,7 +3,9 @@ default_config:
 
 homeassistant:
   packages: !include_dir_named packages
-# Example configuration.yaml entry
+
+automation: !include automations.yaml
+
 http:
   use_x_forwarded_for: true
   trusted_proxies:

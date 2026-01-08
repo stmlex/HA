@@ -55,39 +55,53 @@ influxdb:
       - sensor.total_cost_monthly
 
       - sensor.livingroom_th2_temperature
-      - sensor.bedroom_th2_temperature
-      - sensor.childrensroom_th2_temperature
-      - sensor.kitchen_th2_temperature
-      - sensor.balcony_th2_temperature
-      - sensor.bathroom_th2_temperature
-      - sensor.toilet_th2_temperature
-
       - sensor.livingroom_th2_humidity
-      - sensor.bedroom_th2_humidity
-      - sensor.childrensroom_th2_humidity
-      - sensor.kitchen_th2_humidity
-      - sensor.balcony_th2_humidity
-      - sensor.bathroom_th2_humidity
-      - sensor.toilet_th2_humidity
-
       - sensor.livingroom_th2_battery
-      - sensor.bedroom_th2_battery
-      - sensor.childrensroom_th2_battery
-      - sensor.kitchen_th2_battery
-      - sensor.balcony_th2_battery
-      - sensor.bathroom_th2_battery
-      - sensor.toilet_th2_battery
-      - sensor.main_door_battery
-      - sensor.button_battery
+      - sensor.livingroom_th2_signal_strength
 
-      - sensor.water_toilet_hot_water_temperature
-      - sensor.water_toilet_cold_water_temperature
-      - sensor.water_toilet_hot_water_total
-      - sensor.water_toilet_cold_water_total
-      - sensor.water_bathroom_hot_water_temperature
-      - sensor.water_bathroom_cold_water_temperature
-      - sensor.water_bathroom_hot_water_total
-      - sensor.water_bathroom_cold_water_total
+      - sensor.bedroom_th2_temperature
+      - sensor.bedroom_th2_humidity
+      - sensor.bedroom_th2_battery
+      - sensor.bedroom_th2_signal_strength
+
+      - sensor.childrensroom_th2_temperature
+      - sensor.childrensroom_th2_humidity
+      - sensor.childrensroom_th2_battery
+      - sensor.childrensroom_th2_signal_strength
+
+      - sensor.kitchen_th2_temperature
+      - sensor.kitchen_th2_humidity
+      - sensor.kitchen_th2_battery
+      - sensor.kitchen_th2_signal_strength
+
+      - sensor.balcony_th2_temperature
+      - sensor.balcony_th2_humidity
+      - sensor.balcony_th2_battery
+      - sensor.balcony_th2_signal_strength
+
+      - sensor.bathroom_th2_temperature
+      - sensor.bathroom_th2_humidity
+      - sensor.bathroom_th2_battery
+      - sensor.bathroom_th2_signal_strength
+
+      - sensor.toilet_th2_temperature
+      - sensor.toilet_th2_humidity
+      - sensor.toilet_th2_battery
+      - sensor.toilet_th2_signal_strength
+
+      - sensor.main_door_battery
+      - sensor.main_door_signal_strength
+      - sensor.button_battery
+      - sensor.button_signal_strength
+
+      - sensor.toilet_warp_hot_water_temperature
+      - sensor.toilet_warp_cold_water_temperature
+      - sensor.toilet_warp_hot_water_total
+      - sensor.toilet_warp_cold_water_total
+      - sensor.bathroom_warp_hot_water_temperature
+      - sensor.bathroom_warp_cold_water_temperature
+      - sensor.bathroom_warp_hot_water_total
+      - sensor.bathroom_warp_cold_water_total
 
       - sensor.nas_memory_usage_real
       - sensor.nas_cpu_utilization_total

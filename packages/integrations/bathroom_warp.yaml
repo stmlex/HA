@@ -39,10 +39,10 @@ automation:
         entity_id:
           - input_button.sync_bathroom_totals
     action:
-      - action: esphome.water_bathroom_set_hot_water_total
+      - action: esphome.bathroom_warp_set_hot_water_total
         data:
           value: "{{ hot_water_total }}"
-      - action: esphome.water_bathroom_set_cold_water_total
+      - action: esphome.bathroom_warp_set_cold_water_total
         data:
           value: "{{ cold_water_total }}"
       - action: telegram_bot.send_message
@@ -58,12 +58,12 @@ automation:
     variables:
       upper_treshold: 50
       lower_treshold: 40
-      temperature: "{{ states('sensor.water_bathroom_hot_water_temperature') | float }}"
+      temperature: "{{ states('sensor.bathroom_warp_hot_water_temperature') | float }}"
     mode: single
     triggers:
       - trigger: state
         entity_id:
-          - sensor.water_bathroom_hot_water_temperature
+          - sensor.bathroom_warp_hot_water_temperature
     action:
       - choose:
           - conditions:

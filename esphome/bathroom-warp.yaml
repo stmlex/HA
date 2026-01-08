@@ -1,0 +1,21 @@
+substitutions:
+  node_name: bathroom-warp
+  area_name: "Ванная"
+  api_key: "VyFDfXmbwbPoCYDfs0YqugTv25r/Dc1AN7s/pVUM/Kw="
+  ota_password: "fd2a080cbdf630c48331e3265017b65f6"
+
+packages:
+  common: !include
+    file: common/common.yaml
+  warp: !include
+    file: common/warp.yaml
+    vars:
+      hot_water_total_initial: '17.084'
+      cold_water_total_initial: '30.695'
+      hot_water_ratio_initial: '0.01'
+      cold_water_ratio_initial: '0.01'
+      hot_water_sn: '240542274'
+      cold_water_sn: '240552244'
+
+openthread:
+  tlv: 4a0300000b0e080000000000010000000300000f35060004001fffe0020878d5a19009eab1700708fdb08abfdc01dc5f0510522246b644aa4e9ad923e8ef521d9540030e68612d7468726561642d623138300102b1800410ac8042d8fdbcc673668b1534fc0492350c0402a0f7f8

@@ -8,21 +8,19 @@ yandex_smart_home:
       - sensor.balcony_th2_temperature
       - sensor.bathroom_th2_temperature
       - sensor.toilet_th2_temperature
-      - switch.vannaia_switch
-      - sensor.water_bathroom_hot_water_total
-      - sensor.water_bathroom_cold_water_total
-      - sensor.water_toilet_hot_water_total
-      - sensor.water_toilet_cold_water_total
-      - sensor.water_bathroom_hot_water_temperature
-      - sensor.water_bathroom_cold_water_temperature
-      - sensor.water_toilet_hot_water_temperature
-      - sensor.water_toilet_cold_water_temperature
+      - switch.bathroom_gidrolock
+      - sensor.bathroom_warp_hot_water_total
+      - sensor.bathroom_warp_cold_water_total
+      - sensor.toilet_warp_hot_water_total
+      - sensor.toilet_warp_cold_water_total
+      - sensor.bathroom_warp_hot_water_temperature
+      - sensor.bathroom_warp_cold_water_temperature
+      - sensor.toilet_warp_hot_water_temperature
+      - sensor.toilet_warp_cold_water_temperature
       - sensor.energy_meter_total_t1
       - sensor.energy_meter_total_t2
       - binary_sensor.main_door
-      - sensor.0x00158d000246651d_action
       - light.rgb_clock
-      # - light.hallway_light
       - media_player.televizor_v_gostinoi_2
       - media_player.televizor_v_detskoi_2
       - media_player.televizor_v_spalne_2
@@ -36,28 +34,19 @@ yandex_smart_home:
       - light.night_light_livingroom_rgb_lamp
       - light.night_light_bedroom_rgb_lamp
       - light.night_light_childrens_rgb_lamp
-      # - button.garland_power_2
       - switch.garland_on_off
       - climate.ir_remote_air_cooler
       - climate.air_cooler
       - vacuum.viomi_se
-  # color_profile:
-  #   profile_clock:
-  #     red: ["255", "0", "0"]
-  #     green: ["0", "255", "0"]
-  #     blue: ["0", "0", "255"]
+      - sensor.xerox_b215_multifunction_printer
+      - light.mini_smart_switch1
+      - light.mini_smart_switch2
+      - input_text.mijia_button
   entity_config:
-    # button.garland_power:
-    #   name: Елочка
-    #   room: Гостиная
-    #   custom_toggles:
-    #     backlight:
-    #       turn_on:
-    #         service: button.press
-    #         entity_id: button.garland_effect
-    #       turn_off:
-    #         service: button.press
-    #         entity_id: button.garland_effect
+    input_text.mijia_button:
+      device_class: button
+      name: Кнопка
+      room: Спальня
     vacuum.viomi_se:
       name: Пылесос
       room: Спальня
@@ -77,6 +66,7 @@ yandex_smart_home:
         entity_id: climate.air_cooler
         data:
           hvac_mode: cool
+      device_class: button
     switch.garland_on_off:
       name: Гирлянда
       room: Спальня
@@ -127,6 +117,9 @@ yandex_smart_home:
           entity: sensor.concentration1_1_0mm_2
         - type: pm10_density
           entity: sensor.concentration3_10mm_2
+    sensor.xerox_b215_multifunction_printer:
+      name: Принтер
+      room: Гостиная
     sensor.co2:
       name: Воздух
       room: Детская
@@ -149,8 +142,8 @@ yandex_smart_home:
           entity: sensor.livingroom_th2_temperature
         - type: humidity
           entity: sensor.livingroom_th2_humidity
-        # - type: battery_level
-        # entity: sensor.livingroom_th2_battery
+        - type: battery_level
+          entity: sensor.livingroom_th2_battery
     sensor.bedroom_th2_temperature:
       name: Спальня
       room: Спальня
@@ -159,8 +152,8 @@ yandex_smart_home:
           entity: sensor.bedroom_th2_temperature
         - type: humidity
           entity: sensor.bedroom_th2_humidity
-        # - type: battery_level
-        # entity: sensor.bedroom_th2_battery
+        - type: battery_level
+          entity: sensor.bedroom_th2_battery
     sensor.childrensroom_th2_temperature:
       name: Детская
       room: Детская
@@ -169,8 +162,8 @@ yandex_smart_home:
           entity: sensor.childrensroom_th2_temperature
         - type: humidity
           entity: sensor.childrensroom_th2_humidity
-        # - type: battery_level
-        # entity: sensor.childrensroom_th2_battery
+        - type: battery_level
+          entity: sensor.childrensroom_th2_battery
     sensor.kitchen_th2_temperature:
       name: Кухня
       room: Кухня
@@ -179,8 +172,8 @@ yandex_smart_home:
           entity: sensor.kitchen_th2_temperature
         - type: humidity
           entity: sensor.kitchen_th2_humidity
-        # - type: battery_level
-        # entity: sensor.kitchen_th2_battery
+        - type: battery_level
+          entity: sensor.kitchen_th2_battery
     sensor.balcony_th2_temperature:
       name: Балкон
       room: Балкон
@@ -189,8 +182,8 @@ yandex_smart_home:
           entity: sensor.balcony_th2_temperature
         - type: humidity
           entity: sensor.balcony_th2_humidity
-        # - type: battery_level
-        # entity: sensor.balcony_th2_battery
+        - type: battery_level
+          entity: sensor.balcony_th2_battery
     sensor.toilet_th2_temperature:
       name: Туалет
       room: Туалет
@@ -199,8 +192,8 @@ yandex_smart_home:
           entity: sensor.toilet_th2_temperature
         - type: humidity
           entity: sensor.toilet_th2_humidity
-        # - type: battery_level
-        # entity: sensor.toilet_th2_battery
+        - type: battery_level
+          entity: sensor.toilet_th2_battery
     sensor.bathroom_th2_temperature:
       name: Ванная
       room: Ванная
@@ -209,71 +202,71 @@ yandex_smart_home:
           entity: sensor.bathroom_th2_temperature
         - type: humidity
           entity: sensor.bathroom_th2_humidity
-        # - type: battery_level
-        # entity: sensor.bathroom_th2_battery
-    switch.vannaia_switch:
+        - type: battery_level
+          entity: sensor.bathroom_th2_battery
+    switch.bathroom_gidrolock:
       name: Вода
       room: Ванная
-    sensor.water_bathroom_hot_water_total:
+    sensor.bathroom_warp_hot_water_total:
       name: Счетчик горячей воды
       room: Ванная
       properties:
         - type: water_meter
           unit_of_measurement: m3
-          entity: sensor.water_bathroom_hot_water_total
+          entity: sensor.bathroom_warp_hot_water_total
         - type: temperature
-          entity: sensor.water_bathroom_hot_water_temperature
-    sensor.water_bathroom_hot_water_temperature:
+          entity: sensor.bathroom_warp_hot_water_temperature
+    sensor.bathroom_warp_hot_water_temperature:
       name: Горячая вода
       room: Ванная
       properties:
         - type: temperature
-          entity: sensor.water_bathroom_hot_water_temperature
-    sensor.water_bathroom_cold_water_total:
+          entity: sensor.bathroom_warp_hot_water_temperature
+    sensor.bathroom_warp_cold_water_total:
       name: Счетчик холодной воды
       room: Ванная
       properties:
         - type: water_meter
           unit_of_measurement: m3
-          entity: sensor.water_bathroom_cold_water_total
+          entity: sensor.bathroom_warp_cold_water_total
         - type: temperature
-          entity: sensor.water_bathroom_cold_water_temperature
-    sensor.water_bathroom_cold_water_temperature:
+          entity: sensor.bathroom_warp_cold_water_temperature
+    sensor.bathroom_warp_cold_water_temperature:
       name: Холодная вода
       room: Ванная
       properties:
         - type: temperature
-          entity: sensor.water_bathroom_cold_water_temperature
-    sensor.water_toilet_hot_water_total:
+          entity: sensor.bathroom_warp_cold_water_temperature
+    sensor.toilet_warp_hot_water_total:
       name: Счетчик горячей воды
       room: Туалет
       properties:
         - type: water_meter
           unit_of_measurement: m3
-          entity: sensor.water_toilet_hot_water_total
+          entity: sensor.toilet_warp_hot_water_total
         - type: temperature
-          entity: sensor.water_toilet_hot_water_temperature
-    sensor.water_toilet_hot_water_temperature:
+          entity: sensor.toilet_warp_hot_water_temperature
+    sensor.toilet_warp_hot_water_temperature:
       name: Горячая вода
       room: Туалет
       properties:
         - type: temperature
-          entity: sensor.water_toilet_hot_water_temperature
-    sensor.water_toilet_cold_water_total:
+          entity: sensor.toilet_warp_hot_water_temperature
+    sensor.toilet_warp_cold_water_total:
       name: Счетчик холодной воды
       room: Туалет
       properties:
         - type: water_meter
           unit_of_measurement: m3
-          entity: sensor.water_toilet_cold_water_total
+          entity: sensor.toilet_warp_cold_water_total
         - type: temperature
-          entity: sensor.water_toilet_cold_water_temperature
-    sensor.water_toilet_cold_water_temperature:
+          entity: sensor.toilet_warp_cold_water_temperature
+    sensor.toilet_warp_cold_water_temperature:
       name: Холодная вода
       room: Туалет
       properties:
         - type: temperature
-          entity: sensor.water_toilet_cold_water_temperature
+          entity: sensor.toilet_warp_cold_water_temperature
     sensor.energy_meter_total_t1:
       name: Энергия день
       room: Прихожая
@@ -298,21 +291,17 @@ yandex_smart_home:
           entity: binary_sensor.main_door
         - type: battery_level
           entity: sensor.main_door_battery
-    # sensor.0x00158d000246651d_action:
-    #   device_class: button
-    #   name: Кнопка беспроводная
-    #   room: Спальня
-    #   properties:
-    #     # - type: button
-    #     #   entity: sensor.0x00158d000246651d_action
-    #     - type: battery_level
-    #       entity: sensor.0x00158d000246651d_battery
-    # light.hallway_light:
-    #   name: "Люстра"
-    #   room: "Прихожая"
+        - type: illumination
+          entity: sensor.main_door_illuminance
     light.rgb_clock:
       name: "Часы"
       room: "Гостиная"
+    light.mini_smart_switch1:
+      name: "Гирлянда"
+      room: "Гостиная"
+    light.mini_smart_switch2:
+      name: "Гирлянда"
+      room: "Кухня"
     light.night_light_livingroom_rgb_lamp:
       name: "Лампа"
       room: "Гостиная"

@@ -1,0 +1,240 @@
+esp32:
+  board: esp32-c6-devkitc-1
+  framework:
+    type: esp-idf
+
+logger:
+  logs:
+    light: NONE
+    binary_sensor: NONE
+
+api:
+  actions:
+    - variables:
+        value: float
+      then:
+        - lambda: |-
+            id(hot_water_total) = value;
+            ESP_LOGD("custom", "set_hot_water_total to: %f", value);
+      action: set_hot_water_total
+
+    - variables:
+        value: float
+      then:
+        - lambda: |-
+            id(cold_water_total) = value;
+            ESP_LOGD("custom", "set_cold_water_total to: %f", value);
+      action: set_cold_water_total
+
+    - variables:
+        value: float
+      then:
+        - lambda: |-
+            id(hot_water_ratio) = value;
+            ESP_LOGD("custom", "set_hot_water_ratio to: %f", value);
+      action: set_hot_water_ratio
+
+    - variables:
+        value: float
+      then:
+        - lambda: |-
+            id(cold_water_ratio) = value;
+            ESP_LOGD("custom", "set_cold_water_ratio to: %f", value);
+      action: set_cold_water_ratio
+
+    # - variables:
+    #     value: string
+    #   then:
+    #     - lambda: |-
+    #         id(cold_water_sn) = value;
+    #         ESP_LOGD("custom", "set_cold_water_meter_sn to: %f", value);
+    #   action: set_cold_water_meter_sn
+
+    # - variables:
+    #     value: string
+    #   then:
+    #     - lambda: |-
+    #         id(hot_water_sn) = value;
+    #         ESP_LOGD("custom", "set_hot_water_meter_sn to: %f", value);
+    #   action: set_hot_water_meter_sn
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: rgb_led
+    rgb_order: GRB
+    chipset: ws2812
+    pin: GPIO8
+    num_leds: 1
+    name: "status_led"
+    restore_mode: ALWAYS_ON
+    on_turn_on:
+      then:
+        - light.control:
+            id: rgb_led
+            effect: Status
+    effects:
+      - addressable_lambda:
+          name: "Status"
+          update_interval: '100ms'
+          lambda: |-
+            static auto prev_blink_time = millis();
+            auto blink_time = millis() - prev_blink_time;
+            float red = 0;
+            float green = 0;
+            float blue = 0;
+
+            if(blink_time > 2000) {
+              prev_blink_time = millis();
+              green = 127;
+            }
+            if(blink_time >= 500 && blink_time <= 600 ) {
+              if(id(hot_water_cnt)) {
+                red = 127;
+                id(hot_water_cnt) = false;
+              }
+              else if(id(cold_water_cnt)) {
+                blue = 127;
+                id(cold_water_cnt) = false;
+              }
+            }
+
+            it.all() = Color(red, green, blue);
+
+globals:
+  - id: hot_water_cnt
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  - id: cold_water_cnt
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+  - id: hot_water_total
+    type: double
+    restore_value: true
+    initial_value: ${hot_water_total_initial}
+
+  - id: cold_water_total
+    type: double
+    restore_value: true
+    initial_value: ${cold_water_total_initial}
+
+  - id: hot_water_ratio
+    type: double
+    restore_value: true
+    initial_value: ${hot_water_ratio_initial}
+
+  - id: cold_water_ratio
+    type: double
+    restore_value: true
+    initial_value: ${cold_water_ratio_initial}
+
+  - id: cold_water_sn
+    type: std::string
+    restore_value: true
+    initial_value: '"${cold_water_sn}"'
+
+  - id: hot_water_sn
+    type: std::string
+    restore_value: true
+    initial_value: '"${hot_water_sn}"'
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO6
+      mode:
+        input: true
+        pullup: true
+    name: "hot_water_meter"
+    id: hot_water_meter
+    internal: true
+    on_press:
+      then:
+        - globals.set:
+            id: hot_water_cnt
+            value: 'true'
+        - lambda: |-
+            id(hot_water_total) += id(hot_water_ratio);
+    filters:
+      - invert:
+      - delayed_on: 500ms
+  - platform: gpio
+    pin:
+      number: GPIO7
+      mode:
+        input: true
+        pullup: true
+    name: "cold_water_meter"
+    id: cold_water_meter
+    internal: true
+    on_press:
+      then:
+        - globals.set:
+            id: cold_water_cnt
+            value: 'true'
+        - lambda: |-
+            id(cold_water_total) += id(cold_water_ratio);
+    filters:
+      - invert:
+      - delayed_on: 500ms
+
+one_wire:
+  - platform: gpio
+    pin:
+      number: GPIO18
+      mode:
+        input: true
+        pullup: true
+    id: one_wire_1
+  - platform: gpio
+    pin:
+      number: GPIO14
+      mode:
+        input: true
+        pullup: true
+    id: one_wire_2
+
+sensor:
+  - platform: internal_temperature
+    name: "CPU Temperature"
+    update_interval: 60s
+  - platform: dallas_temp
+    name: hot_water_temperature
+    one_wire_id: one_wire_1
+    update_interval: 60s
+  - platform: dallas_temp
+    name: cold_water_temperature
+    one_wire_id: one_wire_2
+    update_interval: 60s
+
+  - platform: template
+    name: "hot_water_total"
+    device_class: water
+    state_class: total_increasing
+    unit_of_measurement: "m³"
+    icon: "mdi:counter"
+    accuracy_decimals: 3
+    lambda: |-
+      return id(hot_water_total);
+  - platform: template
+    name: "cold_water_total"
+    device_class: water
+    state_class: total_increasing
+    unit_of_measurement: "m³"
+    icon: "mdi:counter"
+    accuracy_decimals: 3
+    lambda: |-
+      return id(cold_water_total);
+          
+text_sensor:
+  - platform: template
+    name: "hot_water_sn"
+    lambda: |-
+      return id(hot_water_sn);
+  - platform: template
+    name: "cold_water_sn"
+    lambda: |-
+      return id(cold_water_sn);

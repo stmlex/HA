@@ -1,7 +1,7 @@
 esphome:
   name: ${node_name}
   friendly_name: ${node_name}
-  area: ${area_name}
+  area: ${area_name}  
 
 api:
   encryption:
@@ -11,10 +11,5 @@ ota:
   - platform: esphome
     password: ${ota_password}
 
-wifi:
-  ssid: ${wifi_ssid}
-  password: ${wifi_password}
-  output_power: 18.0dB
-  ap:
-    ssid: ${node_name}
-    password: ${ap_password}
+network:
+  enable_ipv6: true
