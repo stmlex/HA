@@ -14,8 +14,10 @@ mobile_app: #home assistant mobile application enable
 
 recorder:
   auto_purge: true
-  purge_keep_days : 1
+  purge_keep_days: 1
 
+zha:
+  custom_quirks_path: packages/integrations/custom_zha_quirks/
 # automation:
 #   - alias: "Optimize Database Weekly"
 #     trigger:
