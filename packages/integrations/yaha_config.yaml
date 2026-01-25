@@ -1,159 +1,100 @@
 yandex_smart_home:
   filter:
     include_entity_globs:
-      - sensor.livingroom_th2_temperature
-      - sensor.bedroom_th2_temperature
-      - sensor.childrensroom_th2_temperature
-      - sensor.kitchen_th2_temperature
-      - sensor.balcony_th2_temperature
-      - sensor.bathroom_th2_temperature
-      - sensor.toilet_th2_temperature
-      - switch.bathroom_gidrolock
-      - sensor.bathroom_warp_hot_water_total
-      - sensor.bathroom_warp_cold_water_total
-      - sensor.toilet_warp_hot_water_total
-      - sensor.toilet_warp_cold_water_total
-      - sensor.bathroom_warp_hot_water_temperature
-      - sensor.bathroom_warp_cold_water_temperature
-      - sensor.toilet_warp_hot_water_temperature
-      - sensor.toilet_warp_cold_water_temperature
+      # hallway
       - sensor.energy_meter_total_t1
       - sensor.energy_meter_total_t2
       - binary_sensor.main_door
-      - light.rgb_clock
-      - media_player.televizor_v_gostinoi_2
+      # childrensroom
+      - input_text.smart_button2
+      - sensor.childrensroom_th2_temperature
       - media_player.televizor_v_detskoi_2
-      - media_player.televizor_v_spalne_2
-      - media_player.televizor_na_kukhne_2
-      - sensor.mh_z19_co2_value
-      - sensor.mh_z19_co2_value_2
-      - sensor.co2
       - humidifier.childrenroom
+      - climate.childrens_q_lamp_air_cooler
+      - light.childrens_q_lamp_rgb_lamp
+      # bedroom
+      - sensor.bedroom_th2_temperature
+      - media_player.televizor_v_spalne_2
       - humidifier.bedroom
+      - light.bedroom_q_lamp_rgb_lamp
+      - climate.bedroom_q_lamp_air_cooler
+      - button.bedroom_q_lamp_garland_power
+      - vacuum.viomi_se
+      - input_text.smart_button1
+      # livingroom
+      - sensor.livingroom_th2_temperature
+      - media_player.televizor_v_gostinoi_2
       - humidifier.livingroom
       - light.night_light_livingroom_rgb_lamp
-      - light.night_light_bedroom_rgb_lamp
-      - light.night_light_childrens_rgb_lamp
-      - switch.garland_on_off
-      - climate.ir_remote_air_cooler
-      - climate.air_cooler
-      - vacuum.viomi_se
       - sensor.xerox_b215_multifunction_printer
       - light.mini_smart_switch1
+      # bathroom
+      - switch.bathroom_gidrolock
+      - sensor.bathroom_warp_hot_water_total
+      - sensor.bathroom_warp_cold_water_total
+      - sensor.bathroom_th2_temperature
+      - sensor.bathroom_warp_hot_water_temperature
+      - sensor.bathroom_warp_cold_water_temperature
+      # toilet
+      - sensor.toilet_th2_temperature
+      - sensor.toilet_warp_hot_water_total
+      - sensor.toilet_warp_cold_water_total
+      - sensor.toilet_warp_hot_water_temperature
+      - sensor.toilet_warp_cold_water_temperature
+      # kitchen
+      - sensor.kitchen_th2_temperature
+      - media_player.televizor_na_kukhne_2
       - light.mini_smart_switch2
-      - input_text.mijia_button
+      # balcony
+      - sensor.balcony_th2_temperature
+
   entity_config:
-    input_text.mijia_button:
+    # hallway
+    sensor.energy_meter_total_t1:
+      name: Энергия день
+      room: Прихожая
+      properties:
+        - type: electricity_meter
+          unit_of_measurement: kWh
+          entity: sensor.energy_meter_total_t1
+        - type: power
+          entity: sensor.energy_meter_power
+    sensor.energy_meter_total_t2:
+      name: Энергия ночь
+      room: Прихожая
+      properties:
+        - type: electricity_meter
+          unit_of_measurement: kWh
+          entity: sensor.energy_meter_total_t2
+    binary_sensor.main_door:
+      name: Входная дверь
+      room: Прихожая
+      properties:
+        - type: open
+          entity: binary_sensor.main_door
+        - type: battery_level
+          entity: sensor.main_door_battery
+        - type: illumination
+          entity: sensor.main_door_illuminance
+    # childrensroom
+    input_text.smart_button2:
       device_class: button
       name: Кнопка
-      room: Спальня
-    vacuum.viomi_se:
-      name: Пылесос
-      room: Спальня
-    climate.ir_remote_air_cooler:
+      room: Детская
+    climate.childrens_q_lamp_air_cooler:
       name: Кондиционер
       room: Детская
       turn_on:
         action: climate.set_hvac_mode
-        entity_id: climate.ir_remote_air_cooler
+        entity_id: climate.childrens_q_lamp_air_cooler
         data:
           hvac_mode: cool
-    climate.air_cooler:
-      name: Кондиционер
-      room: Спальня
-      turn_on:
-        action: climate.set_hvac_mode
-        entity_id: climate.air_cooler
-        data:
-          hvac_mode: cool
-      device_class: button
-    switch.garland_on_off:
-      name: Гирлянда
-      room: Спальня
-      custom_toggles:
-        backlight:
-          turn_on:
-            service: button.press
-            entity_id: button.garland_effect
-          turn_off:
-            service: button.press
-            entity_id: button.garland_effect
     humidifier.childrenroom:
       name: Увлажнитель
       room: Детская
       properties:
         - type: water_level
           entity: sensor.humidifier_childrenroom_water_level
-    humidifier.livingroom:
-      name: Увлажнитель
-      room: Гостиная
-    humidifier.bedroom:
-      name: Увлажнитель
-      room: Спальня
-      properties:
-        - type: water_level
-          entity: sensor.humidifier_bedroom_water_level
-    sensor.mh_z19_co2_value:
-      name: Воздух
-      room: Спальня
-      properties:
-        - type: co2_level
-          entity: sensor.mh_z19_co2_value
-        - type: pm2.5_density
-          entity: sensor.concentration2_2_5mm
-        - type: pm1_density
-          entity: sensor.concentration1_1_0mm
-        - type: pm10_density
-          entity: sensor.concentration3_10mm
-    sensor.mh_z19_co2_value_2:
-      name: Воздух
-      room: Гостиная
-      properties:
-        - type: co2_level
-          entity: sensor.mh_z19_co2_value_2
-        - type: pm2.5_density
-          entity: sensor.concentration2_2_5mm_2
-        - type: pm1_density
-          entity: sensor.concentration1_1_0mm_2
-        - type: pm10_density
-          entity: sensor.concentration3_10mm_2
-    sensor.xerox_b215_multifunction_printer:
-      name: Принтер
-      room: Гостиная
-    sensor.co2:
-      name: Воздух
-      room: Детская
-      properties:
-        - type: co2_level
-          entity: sensor.co2
-        - type: pm2.5_density
-          entity: sensor.pm1006k_2_5mm_m3
-        - type: pm1_density
-          entity: sensor.pm1006k_1_0mm_m3
-        - type: pm10_density
-          entity: sensor.pm1006k_10_0mm_m3
-        - type: humidity
-          entity: sensor.humidity
-    sensor.livingroom_th2_temperature:
-      name: Гостиная
-      room: Гостиная
-      properties:
-        - type: temperature
-          entity: sensor.livingroom_th2_temperature
-        - type: humidity
-          entity: sensor.livingroom_th2_humidity
-        - type: battery_level
-          entity: sensor.livingroom_th2_battery
-    sensor.bedroom_th2_temperature:
-      name: Спальня
-      room: Спальня
-      properties:
-        - type: temperature
-          entity: sensor.bedroom_th2_temperature
-        - type: humidity
-          entity: sensor.bedroom_th2_humidity
-        - type: battery_level
-          entity: sensor.bedroom_th2_battery
     sensor.childrensroom_th2_temperature:
       name: Детская
       room: Детская
@@ -164,36 +105,125 @@ yandex_smart_home:
           entity: sensor.childrensroom_th2_humidity
         - type: battery_level
           entity: sensor.childrensroom_th2_battery
-    sensor.kitchen_th2_temperature:
-      name: Кухня
-      room: Кухня
+    light.childrens_q_lamp_rgb_lamp:
+      name: "Лампа"
+      room: "Детская"
+      modes:
+        scene:
+          candle:
+            - "Fire"
+          siren:
+            - "Color_wipe"
+          fantasy:
+            - "Rainbow"
+          garland:
+            - "Fireworks"
+    media_player.televizor_v_detskoi_2:
+      name: Телевизор
+      room: Детская
+    # bedroom
+    input_text.smart_button1:
+      device_class: button
+      name: Кнопка
+      room: Спальня
+    vacuum.viomi_se:
+      name: Пылесос
+      room: Спальня
+    climate.bedroom_q_lamp_air_cooler:
+      name: Кондиционер
+      room: Спальня
+      turn_on:
+        action: climate.set_hvac_mode
+        entity_id: climate.bedroom_q_lamp_air_cooler
+        data:
+          hvac_mode: cool
+      device_class: button
+    button.bedroom_q_lamp_garland_power:
+      name: Гирлянда
+      room: Спальня
+      # custom_toggles:
+      # backlight:
+      #   turn_on:
+      #     service: button.press
+      #     entity_id: button.garland_effect
+      #   turn_off:
+      #     service: button.press
+      #     entity_id: button.garland_effect
+    humidifier.bedroom:
+      name: Увлажнитель
+      room: Спальня
+      properties:
+        - type: water_level
+          entity: sensor.humidifier_bedroom_water_level
+    sensor.bedroom_th2_temperature:
+      name: Спальня
+      room: Спальня
       properties:
         - type: temperature
-          entity: sensor.kitchen_th2_temperature
+          entity: sensor.bedroom_th2_temperature
         - type: humidity
-          entity: sensor.kitchen_th2_humidity
+          entity: sensor.bedroom_th2_humidity
         - type: battery_level
-          entity: sensor.kitchen_th2_battery
-    sensor.balcony_th2_temperature:
-      name: Балкон
-      room: Балкон
+          entity: sensor.bedroom_th2_battery
+    light.bedroom_q_lamp_rgb_lamp:
+      name: "Лампа"
+      room: "Спальня"
+      modes:
+        scene:
+          candle:
+            - "Fire"
+          siren:
+            - "Color_wipe"
+          fantasy:
+            - "Rainbow"
+          garland:
+            - "Fireworks"
+    media_player.televizor_v_spalne_2:
+      name: Телевизор
+      room: Спальня
+    # livingroom
+    humidifier.livingroom:
+      name: Увлажнитель
+      room: Гостиная
+    sensor.xerox_b215_multifunction_printer:
+      name: Принтер
+      room: Гостиная
+    sensor.livingroom_th2_temperature:
+      name: Гостиная
+      room: Гостиная
       properties:
         - type: temperature
-          entity: sensor.balcony_th2_temperature
+          entity: sensor.livingroom_th2_temperature
         - type: humidity
-          entity: sensor.balcony_th2_humidity
+          entity: sensor.livingroom_th2_humidity
         - type: battery_level
-          entity: sensor.balcony_th2_battery
-    sensor.toilet_th2_temperature:
-      name: Туалет
-      room: Туалет
-      properties:
-        - type: temperature
-          entity: sensor.toilet_th2_temperature
-        - type: humidity
-          entity: sensor.toilet_th2_humidity
-        - type: battery_level
-          entity: sensor.toilet_th2_battery
+          entity: sensor.livingroom_th2_battery
+    light.rgb_clock:
+      name: "Часы"
+      room: "Гостиная"
+    light.mini_smart_switch1:
+      name: "Гирлянда"
+      room: "Гостиная"
+    light.mini_smart_switch2:
+      name: "Гирлянда"
+      room: "Кухня"
+    light.night_light_livingroom_rgb_lamp:
+      name: "Лампа"
+      room: "Гостиная"
+      modes:
+        scene:
+          candle:
+            - "Fire"
+          siren:
+            - "Color_wipe"
+          fantasy:
+            - "Rainbow"
+          garland:
+            - "Fireworks"
+    media_player.televizor_v_gostinoi_2:
+      name: Телевизор
+      room: Гостиная
+    # bathroom
     sensor.bathroom_th2_temperature:
       name: Ванная
       room: Ванная
@@ -237,6 +267,17 @@ yandex_smart_home:
       properties:
         - type: temperature
           entity: sensor.bathroom_warp_cold_water_temperature
+    # toilet
+    sensor.toilet_th2_temperature:
+      name: Туалет
+      room: Туалет
+      properties:
+        - type: temperature
+          entity: sensor.toilet_th2_temperature
+        - type: humidity
+          entity: sensor.toilet_th2_humidity
+        - type: battery_level
+          entity: sensor.toilet_th2_battery
     sensor.toilet_warp_hot_water_total:
       name: Счетчик горячей воды
       room: Туалет
@@ -267,89 +308,28 @@ yandex_smart_home:
       properties:
         - type: temperature
           entity: sensor.toilet_warp_cold_water_temperature
-    sensor.energy_meter_total_t1:
-      name: Энергия день
-      room: Прихожая
+    # kitchen
+    sensor.kitchen_th2_temperature:
+      name: Кухня
+      room: Кухня
       properties:
-        - type: electricity_meter
-          unit_of_measurement: kWh
-          entity: sensor.energy_meter_total_t1
-        - type: power
-          entity: sensor.energy_meter_power
-    sensor.energy_meter_total_t2:
-      name: Энергия ночь
-      room: Прихожая
-      properties:
-        - type: electricity_meter
-          unit_of_measurement: kWh
-          entity: sensor.energy_meter_total_t2
-    binary_sensor.main_door:
-      name: Входная дверь
-      room: Прихожая
-      properties:
-        - type: open
-          entity: binary_sensor.main_door
+        - type: temperature
+          entity: sensor.kitchen_th2_temperature
+        - type: humidity
+          entity: sensor.kitchen_th2_humidity
         - type: battery_level
-          entity: sensor.main_door_battery
-        - type: illumination
-          entity: sensor.main_door_illuminance
-    light.rgb_clock:
-      name: "Часы"
-      room: "Гостиная"
-    light.mini_smart_switch1:
-      name: "Гирлянда"
-      room: "Гостиная"
-    light.mini_smart_switch2:
-      name: "Гирлянда"
-      room: "Кухня"
-    light.night_light_livingroom_rgb_lamp:
-      name: "Лампа"
-      room: "Гостиная"
-      modes:
-        scene:
-          candle:
-            - "Fire"
-          siren:
-            - "Color_wipe"
-          fantasy:
-            - "Rainbow"
-          garland:
-            - "Fireworks"
-    light.night_light_bedroom_rgb_lamp:
-      name: "Лампа"
-      room: "Спальня"
-      modes:
-        scene:
-          candle:
-            - "Fire"
-          siren:
-            - "Color_wipe"
-          fantasy:
-            - "Rainbow"
-          garland:
-            - "Fireworks"
-    light.night_light_childrens_rgb_lamp:
-      name: "Лампа"
-      room: "Детская"
-      modes:
-        scene:
-          candle:
-            - "Fire"
-          siren:
-            - "Color_wipe"
-          fantasy:
-            - "Rainbow"
-          garland:
-            - "Fireworks"
-    media_player.televizor_v_gostinoi_2:
-      name: Телевизор
-      room: Гостиная
-    media_player.televizor_v_detskoi_2:
-      name: Телевизор
-      room: Детская
-    media_player.televizor_v_spalne_2:
-      name: Телевизор
-      room: Спальня
+          entity: sensor.kitchen_th2_battery
     media_player.televizor_na_kukhne_2:
       name: Телевизор
       room: Кухня
+    # balcony
+    sensor.balcony_th2_temperature:
+      name: Балкон
+      room: Балкон
+      properties:
+        - type: temperature
+          entity: sensor.balcony_th2_temperature
+        - type: humidity
+          entity: sensor.balcony_th2_humidity
+        - type: battery_level
+          entity: sensor.balcony_th2_battery
