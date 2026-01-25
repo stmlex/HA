@@ -6,6 +6,7 @@ yandex_smart_home:
       - sensor.energy_meter_total_t2
       - binary_sensor.main_door
       # childrensroom
+      - climate.childrensroom_ntrv16
       - input_text.smart_button2
       - sensor.childrensroom_th2_temperature
       - media_player.televizor_v_detskoi_2
@@ -13,6 +14,7 @@ yandex_smart_home:
       - climate.childrens_q_lamp_air_cooler
       - light.childrens_q_lamp_rgb_lamp
       # bedroom
+      - climate.bedroom_ntrv16
       - sensor.bedroom_th2_temperature
       - media_player.televizor_v_spalne_2
       - humidifier.bedroom
@@ -22,6 +24,7 @@ yandex_smart_home:
       - vacuum.viomi_se
       - input_text.smart_button1
       # livingroom
+      - climate.livingroom_ntrv16
       - sensor.livingroom_th2_temperature
       - media_player.televizor_v_gostinoi_2
       - humidifier.livingroom
@@ -42,6 +45,7 @@ yandex_smart_home:
       - sensor.toilet_warp_hot_water_temperature
       - sensor.toilet_warp_cold_water_temperature
       # kitchen
+      - climate.kitchen_ntrv16
       - sensor.kitchen_th2_temperature
       - media_player.televizor_na_kukhne_2
       - light.mini_smart_switch2
@@ -77,6 +81,9 @@ yandex_smart_home:
         - type: illumination
           entity: sensor.main_door_illuminance
     # childrensroom
+    climate.childrensroom_ntrv16:
+      name: Батарея
+      room: Детская
     input_text.smart_button2:
       device_class: button
       name: Кнопка
@@ -122,6 +129,9 @@ yandex_smart_home:
       name: Телевизор
       room: Детская
     # bedroom
+    climate.bedroom_ntrv16:
+      name: Батарея
+      room: Спальня
     input_text.smart_button1:
       device_class: button
       name: Кнопка
@@ -182,6 +192,9 @@ yandex_smart_home:
       name: Телевизор
       room: Спальня
     # livingroom
+    climate.livingroom_ntrv16:
+      name: Батарея
+      room: Гостиная
     humidifier.livingroom:
       name: Увлажнитель
       room: Гостиная
@@ -309,6 +322,9 @@ yandex_smart_home:
         - type: temperature
           entity: sensor.toilet_warp_cold_water_temperature
     # kitchen
+    climate.kitchen_ntrv16:
+      name: Батарея
+      room: Кухня
     sensor.kitchen_th2_temperature:
       name: Кухня
       room: Кухня
