@@ -8,56 +8,6 @@ logger:
     light: NONE
     binary_sensor: NONE
 
-api:
-  actions:
-    - variables:
-        value: float
-      then:
-        - lambda: |-
-            id(hot_water_total) = value;
-            ESP_LOGD("custom", "set_hot_water_total to: %f", value);
-      action: set_hot_water_total
-
-    - variables:
-        value: float
-      then:
-        - lambda: |-
-            id(cold_water_total) = value;
-            ESP_LOGD("custom", "set_cold_water_total to: %f", value);
-      action: set_cold_water_total
-
-    - variables:
-        value: float
-      then:
-        - lambda: |-
-            id(hot_water_ratio) = value;
-            ESP_LOGD("custom", "set_hot_water_ratio to: %f", value);
-      action: set_hot_water_ratio
-
-    - variables:
-        value: float
-      then:
-        - lambda: |-
-            id(cold_water_ratio) = value;
-            ESP_LOGD("custom", "set_cold_water_ratio to: %f", value);
-      action: set_cold_water_ratio
-
-    # - variables:
-    #     value: string
-    #   then:
-    #     - lambda: |-
-    #         id(cold_water_sn) = value;
-    #         ESP_LOGD("custom", "set_cold_water_meter_sn to: %f", value);
-    #   action: set_cold_water_meter_sn
-
-    # - variables:
-    #     value: string
-    #   then:
-    #     - lambda: |-
-    #         id(hot_water_sn) = value;
-    #         ESP_LOGD("custom", "set_hot_water_meter_sn to: %f", value);
-    #   action: set_hot_water_meter_sn
-
 light:
   - platform: esp32_rmt_led_strip
     id: rgb_led
@@ -238,3 +188,30 @@ text_sensor:
     name: "cold_water_sn"
     lambda: |-
       return id(cold_water_sn);
+
+number:
+  - platform: template
+    id: cold_water_total_set
+    name: "Cold Water Total"
+    min_value: 0.001
+    max_value: 99999.999
+    unit_of_measurement: "m³"
+    step: 0.001
+    optimistic: true
+  - platform: template
+    id: hot_water_total_set
+    name: "Hot Water Total"
+    min_value: 0.001
+    max_value: 99999.999
+    unit_of_measurement: "m³"
+    step: 0.001
+    optimistic: true
+
+button:
+  - platform: template
+    name: "Sync Totals"
+    on_press:
+      then:
+        - lambda: |-
+            id(cold_water_total) = id(cold_water_total_set).state;
+            id(hot_water_total) = id(hot_water_total_set).state;
