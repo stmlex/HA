@@ -1,0 +1,88 @@
+# configuration.yaml
+input_text:
+  smart_button1:
+    name: "smart_button1"
+    initial: ""
+  smart_button2:
+    name: "smart_button2"
+    initial: ""
+
+automation:
+  - alias: SmartButton1
+    trigger:
+      - platform: event
+        event_type: zha_event
+        event_data:
+          device_id: 94c9d65a272ddc185a55b918b87ee142
+    action:
+      - variables:
+          click_type: "{{ trigger.event.data.args.click_type }}"
+          attrname: "{{ trigger.event.data.args.attribute_name }}"
+          value: "{{ trigger.event.data.args.value }}"
+          command: "{{ trigger.event.data.command }}"
+      - choose:
+          - conditions: "{{ command == 'hold' }}"
+            sequence:
+              - service: input_text.set_value
+                entity_id: input_text.smart_button1
+                data:
+                  value: long_click
+          - conditions: "{{ command == 'click' }}"
+            sequence:
+              - choose:
+                  - conditions: "{{ click_type == 'double' }}"
+                    sequence:
+                      - service: input_text.set_value
+                        entity_id: input_text.smart_button1
+                        data:
+                          value: double_click
+                  - conditions: "{{ click_type == 'single' }}"
+                    sequence:
+                      - service: input_text.set_value
+                        entity_id: input_text.smart_button1
+                        data:
+                          value: click
+                  - conditions: "{{ click_type == 'hold' }}"
+                    sequence:
+                      - service: input_text.set_value
+                        entity_id: input_text.smart_button1
+                        data:
+                          value: long_click
+      - service: input_text.set_value
+        entity_id: input_text.smart_button1
+        data:
+          value: ""
+
+  - alias: SmartButton2
+    trigger:
+      - platform: event
+        event_type: zha_event
+        event_data:
+          device_id: 984addabfe9496d89efe2c67754712b9
+    action:
+      - variables:
+          command: '{{ trigger.event.data.command }}'
+          endpoint_id: '{{ trigger.event.data.endpoint_id }}'
+      - choose:
+        - conditions: '{{ command == ''toggle'' }}'
+          sequence:
+            - service: input_text.set_value
+              entity_id: input_text.smart_button2
+              data:
+                value: click
+        - conditions: '{{ command == ''on'' }}'
+          sequence:
+            - service: input_text.set_value
+              entity_id: input_text.smart_button2
+              data:
+                value: double_click
+        - conditions: '{{ command == ''off'' }}'
+          sequence:
+            - service: input_text.set_value
+              entity_id: input_text.smart_button2
+              data:
+                value: long_click
+      - service: input_text.set_value
+        entity_id: input_text.smart_button2
+        data:
+          value: ""

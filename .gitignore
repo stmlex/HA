@@ -6,3 +6,5 @@
 !blueprints
 secrets.yaml
 !esphome
+esphome/archive
+*.pyc

@@ -1,0 +1,59 @@
+blueprint:
+  name: ZHA - 1-Button Scene Switch ("HOBEIAN") ( ZG-101ZL)
+  description: Automate your 1-Button Scene Switch using ZHA events.
+  domain: automation
+  input:
+    1button_scene_switch:
+      name: 1-Button Scene Switch
+      description: 1-Button Scene Switch to use
+      selector:
+        device:
+          integration: zha
+          manufacturer:  HOBEIAN
+          model: ZG-101ZL
+          multiple: false
+    button_one_short_press:
+      name: Button, single press
+      description: Action to run on button single press
+      default: []
+      selector:
+        action: {}
+    button_one_double_press:
+      name: Button, double press
+      description: Action to run on button double press
+      default: []
+      selector:
+        action: {}
+    button_one_long_press:
+      name: Button, long press
+      description: Action to run on button long press
+      default: []
+      selector:
+        action: {}
+mode: restart
+max_exceeded: silent
+trigger:
+- platform: event
+  event_type: zha_event
+  event_data:
+    device_id: !input 1button_scene_switch
+action:
+- variables:
+    command: '{{ trigger.event.data.command }}'
+    endpoint_id: '{{ trigger.event.data.endpoint_id }}'
+- choose:
+  - conditions: '{{ command == ''toggle'' }}'
+    sequence:
+    - choose:
+      - conditions: '{{ endpoint_id == 1 }}'
+        sequence: !input button_one_short_press
+  - conditions: '{{ command == ''on'' }}'
+    sequence:
+    - choose:
+      - conditions: '{{ endpoint_id == 1 }}'
+        sequence: !input button_one_double_press
+  - conditions: '{{ command == ''off'' }}'
+    sequence:
+    - choose:
+      - conditions: '{{ endpoint_id == 1 }}'
+        sequence: !input button_one_long_press
